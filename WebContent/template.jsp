@@ -121,9 +121,9 @@ desired effect
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" id ="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" id ="content-header">
       <h1>
         <%= request.getAttribute("pageHeader") %>
         <small><%= request.getAttribute("pageDescribtion") %></small>
@@ -157,7 +157,7 @@ desired effect
   <!-- /.content-wrapper -->
 
   <!-- Main Footer -->
-  <footer class="main-footer">
+  <footer class="main-footer" id ="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
       Made by Bo-Ting Wu & Ya-Wei Tsou.
