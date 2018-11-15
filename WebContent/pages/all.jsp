@@ -29,83 +29,55 @@ function initMap() {
 
 // Data Points
 
-	var marker = new google.maps.Marker({
-		position: MN,
-		map: map,
-		title: 'MN (Ayers Rock)'
-	});
+	// var marker = new google.maps.Marker({
+	// 	position: MN,
+	// 	map: map,
+	// 	title: 'MN (Ayers Rock)'
+	// });
 
 	var infowindow = new google.maps.InfoWindow({
-		content:'<div id="content">'+
-				'<div id="siteNotice">'+
-				'</div>'+
-				'<h1 id="firstHeading" class="firstHeading">MN</h1>'+
-				'<div id="bodyContent">'+
-				'<p><b>MN</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-				'sandstone rock formation in the southern part of the '+
-				'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-				'south west of the nearest large town, Alice Springs; 450&#160;km '+
-				'(280&#160;mi) by road. Kata Tjuta and MN are the two major '+
-				'features of the MN - Kata Tjuta National Park. MN is '+
-				'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-				'Aboriginal people of the area. It has many springs, waterholes, '+
-				'rock caves and ancient paintings. MN is listed as a World '+
-				'Heritage Site.</p>'+
-				'<p>Attribution: MN, <a href="https://en.wikipedia.org/w/index.php?title=MN&oldid=297882194">'+
-				'https://en.wikipedia.org/w/index.php?title=MN</a> '+
-				'(last visited June 22, 2009).</p>'+
-				'</div>'+
-				'</div>'
+		// content:'<div id="content">'+
+		// 		'<div id="siteNotice">'+
+		// 		'</div>'+
+		// 		'<h1 id="firstHeading" class="firstHeading">MN</h1>'+
+		// 		'<div id="bodyContent">'+
+		// 		'<p><b>MN</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+		// 		'sandstone rock formation in the southern part of the '+
+		// 		'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+		// 		'south west of the nearest large town, Alice Springs; 450&#160;km '+
+		// 		'(280&#160;mi) by road. Kata Tjuta and MN are the two major '+
+		// 		'features of the MN - Kata Tjuta National Park. MN is '+
+		// 		'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+		// 		'Aboriginal people of the area. It has many springs, waterholes, '+
+		// 		'rock caves and ancient paintings. MN is listed as a World '+
+		// 		'Heritage Site.</p>'+
+		// 		'<p>Attribution: MN, <a href="https://en.wikipedia.org/w/index.php?title=MN&oldid=297882194">'+
+		// 		'https://en.wikipedia.org/w/index.php?title=MN</a> '+
+		// 		'(last visited June 22, 2009).</p>'+
+		// 		'</div>'+
+		// 		'</div>'
 	});
 
-	marker.addListener('click', function() {
-		infowindow.open(map, marker);
-	});
+	// marker.addListener('click', function() {
+	// 	infowindow.open(map, marker);
+	// });
 
+	$.getJSON('data?page=all', function(json) {
 
-// Testing
+		$.each(json.universities, function (key, data) {
 
+			var latLng = new google.maps.LatLng(data.lat, data.lng);
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map,
+				title: data.title
+			});
 
+			var details = data.website + ", " + data.phone + ".";
 
-	 $.getJSON('data', function(json1) {
-	// var json1 = {
-	//     "universities": [
-	//         {
-	//             "title": "Aberystwyth University",
-	//             "website": "www.aber.ac.uk",
-	//             "phone": "+44 (0)1970 623 111",
-	//             "lat": 52.415524,
-	//             "lng": -4.063066},
-	//         {
-	//             "title": "Bangor University",
-	//             "website": "www.bangor.ac.uk",
-	//             "phone": "+44 (0)1248 351 151",
-	//             "lat": 53.229520,
-	//             "lng": -4.129987},
-	//         {
-	//             "title": "Cardiff Metropolitan University",
-	//             "website": "www.cardiffmet.ac.uk",
-	//             "phone": "+44 (0)2920 416 138",
-	//             "lat": 51.482708,
-	//             "lng": -3.165881}
-	//     ]
-	// };
-	$.each(json1.universities, function (key, data) {
+			bindInfoWindow(marker, map, infowindow, details);
 
-	    var latLng = new google.maps.LatLng(data.lat, data.lng);
-
-	    var marker = new google.maps.Marker({
-	        position: latLng,
-	        map: map,
-	        title: data.title
-	    });
-
-	    var details = data.website + ", " + data.phone + ".";
-
-	    bindInfoWindow(marker, map, infowindow, details);
-
-	});
-
+		});
 
 		function bindInfoWindow(marker, map, infowindow, strDescription) {
 			google.maps.event.addListener(marker, 'click', function () {
@@ -113,11 +85,7 @@ function initMap() {
 				infowindow.open(map, marker);
 			});
 		}
-
 	});
-
-// google.maps.event.addDomListener(window, 'load', initialize);
-
 }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATfq2_60fgdqXMK6NP9FTKFLOltGwu3E&callback=initMap" async defer></script>
@@ -206,7 +174,7 @@ var MNBoundary = [
 	{lng: -91.925,	lat: 44.275},
 	{lng: -91.85,	lat: 44.175},
 	{lng: -91.7,	lat: 44.125},
-	{lng: -91.6,	lat: 44.025},
+	{lng: -91.55,	lat: 44.03},
 	{lng: -91.425,	lat: 44},
 	{lng: -91.25,	lat: 43.8},
 	{lng: -91.275,	lat: 43.6},
