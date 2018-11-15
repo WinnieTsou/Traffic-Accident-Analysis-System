@@ -134,49 +134,274 @@ desired effect
 
     <!-- Main content -->
     <section class="content container-fluid">
+	      <div class="row">
+	              <div class="col-md-6">
+			          <!-- BAR CHART -->
+			          <div class="box box-success">
+			            <div class="box-header with-border">
+			              <h3 class="box-title">Bar Chart</h3>
+			
+			              <div class="box-tools pull-right">
+			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+			                </button>
+			                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+			              </div>
+			            </div>
+			            <div class="box-body">
+			              <div class="chart">
+			                <canvas id="myBarChart"></canvas>
+			              </div>
+			            </div>
+			            <!-- /.box-body -->
+			          </div>
+			          <!-- /.box -->
+	              	<!-- POLAR AREA -->
+			          <div class="box box-success">
+			            <div class="box-header with-border">
+			              <h3 class="box-title">Polar Chart</h3>
+			
+			              <div class="box-tools pull-right">
+			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+			                </button>
+			                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+			              </div>
+			            </div>
+			            <div class="box-body">
+			              <div class="chart">
+			                <canvas id="myPolarArea"></canvas>
+			              </div>
+			            </div>
+			            <!-- /.box-body -->
+			          </div>
+			          <!-- /.box -->
+	              <!-- BAR CHART -->
+			          <div class="box box-success">
+			            <div class="box-header with-border">
+			              <h3 class="box-title">Line Chart</h3>
+			
+			              <div class="box-tools pull-right">
+			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+			                </button>
+			                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+			              </div>
+			            </div>
+			            <div class="box-body">
+			              <div class="chart">
+			                <canvas id="areaChart"></canvas>
+			              </div>
+			            </div>
+			            <!-- /.box-body -->
+			          </div>
+			          <!-- /.box -->
+	              </div>
+                        <div class="col-md-6">
+          <!-- BAR CHART -->
+                <div class="box box-success">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Radar Chart</h3>
+      
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <div class="chart">
+                      <canvas id="myRadar"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
 
-            <div class="box-body">
-            </div>
-            
-            <canvas id="myChart" width="50%" height="50%"></canvas>
+                <!-- BAR CHART -->
+                <div class="box box-success">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Doughnut Chart</h3>
+      
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <div class="chart">
+                      <canvas id="myDoughnut"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+                <!-- BAR CHART -->
+                <div class="box box-success">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Line Chart</h3>
+      
+                    <div class="box-tools pull-right">
+                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="box-body">
+                    <div class="chart">
+                      <canvas id="myLineChart"></canvas>
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+        </div>
+	      </div>
+
+
 <script>
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
+
+
+var ctx = document.getElementById("myBarChart").getContext("2d");
+var data = {
+	labels: ["Snowy", "Rainy"],
+	datasets: [{
+		label: "Winnie",
+		data: [1, 20],
+		backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)"],
+		borderColor: ["rgba(54, 162, 235,1)", "rgba(54, 162, 235, 1)"],
+		borderWidth: 1
+	}, {
+    label: "Andy",
+    data: [5, 2],
+    backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 99, 132, 0.2)"],
+    borderColor: ["rgba(255,99,132,1)", "rgba(255, 99, 132, 1)"],
+    borderWidth: 1
+  }]
+};
+var options = {
+	scales:{
+		yAxes:[{
+			ticks:{
+				beginAtZero: true
+			}
+		}]
+	}
+};
+var myBarChart = new Chart(ctx, {
     type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
+    data: data,
+    options: options
 });
+
+var ctxPolarArea = document.getElementById("myPolarArea").getContext("2d");
+var dataPolar = {
+	labels: ["Snowy", "Rainy", "Cloudy"],
+	datasets: [{
+		label: "Weather",
+		data: [10, 20, 30],
+		backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe"],
+		borderColor: ["#000", "#000", "#000"],
+		borderWidth: 1
+	}]
+};
+var optionsPolar = {
+		
+};
+var myPolarArea = new Chart(ctxPolarArea,{
+	type: "polarArea",
+	data: dataPolar,
+	options: optionsPolar
+});
+
+
+var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+var areaChartData = {
+  labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'Electronics',
+      backgroundColor: 'rgba(210, 214, 222, 0.4)',
+      pointBackgroundColor: 'rgba(210, 214, 222, 0.4)',
+      showLines: true,
+      data: [65, 59, 80, 81, 56, 55, 40]
+    },
+    {
+      label: 'Digital Goods',
+      backgroundColor: 'rgba(60,141,188,0.4)',
+      pointBackgroundColor: 'rgba(60,141,188,0.4)',
+      showLines: true,
+      data: [28, 48, 40, 19, 86, 27, 90]
+    }
+  ]
+};
+
+var areaChartOptions = {
+		showLines: true,
+		spanGaps: false
+};
+
+var areaChart = new Chart(areaChartCanvas, {
+	type: "line",
+	data: areaChartData,
+	options: areaChartOptions
+});
+
+var radar = document.getElementById("myRadar").getContext("2d");
+var radarData = {
+  labels: ["Snowy", "Cloudy", "Rainy"],
+  datasets: [{
+    label: "Weather",
+    data: [20, 10, 4]
+  }]
+};
+var radarOptions = {
+
+};
+var myRadar = new Chart(radar, {
+  type: "radar",
+  data: radarData,
+  options: radarOptions
+})
+
+var doughnut = document.getElementById("myDoughnut").getContext("2d");
+
+var doughnutData = {
+  labels: ["Snowy", "Rainy", "Cloudy"],
+  datasets: [{
+    label: "Weather",
+    data: [10, 20, 30],
+    backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(100, 130, 180, 0.2)"]
+  }]
+};
+
+var doughnutOptions = {
+
+};
+
+var myDoughnut = new Chart(doughnut, {
+  type: "doughnut",
+  data: doughnutData,
+  options: doughnutOptions
+});
+
+var lineChart = document.getElementById("myLineChart").getContext("2d");
+var lineChartData = {
+  labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [{
+      label: 'Electronics',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      fill: false
+    }]
+};
+var lineChartOptions = {
+
+};
+var myLineChart = new Chart(lineChart, {
+  type: "line",
+  data: lineChartData,
+  options: lineChartOptions
+});
+
 </script>
 
 
