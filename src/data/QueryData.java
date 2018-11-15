@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 @WebServlet("/QueryData")
 public class QueryData extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +38,10 @@ public class QueryData extends HttpServlet {
 	}
 
 	private void all(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		Gson gson = new Gson();
+		
+
 		response.getWriter().append("{\n" + "	\"universities\": [\n" + "		{\n"
 				+ "			\"title\": \"Aberystwyth University\",\n" + "			\"website\": \"www.aber.ac.uk\",\n"
 				+ "			\"phone\": \"+44 (0)1970 623 111\",\n" + "			\"lat\": 52.415524,\n"
