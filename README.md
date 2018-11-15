@@ -1,2 +1,2 @@
-# Traffic-Accident-Analysis-System
+# Traffic Accident Analysis System
 CS485 Term Project

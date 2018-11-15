@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
+import JSON.JSONObject;
 
 @WebServlet("/QueryData")
 public class QueryData extends HttpServlet {
@@ -39,8 +39,7 @@ public class QueryData extends HttpServlet {
 
 	private void all(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		Gson gson = new Gson();
-		
+		JSONObject s;
 
 		response.getWriter().append("{\n" + "	\"universities\": [\n" + "		{\n"
 				+ "			\"title\": \"Aberystwyth University\",\n" + "			\"website\": \"www.aber.ac.uk\",\n"
