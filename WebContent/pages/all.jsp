@@ -1,4 +1,6 @@
-<div id="map" style="width: 100%; height: 400px; background-color: #dddddd;"><p>Google Map Not Loaded. :((</p></div>
+<div id="map" style="width: 100%; height: 400px; background-color: #dddddd;">
+	<p>Google Map is not loaded. :((</p>
+</div>
 
 <script>
 var map;
@@ -27,37 +29,62 @@ function initMap() {
 
 // Data Points
 
-	var marker = new google.maps.Marker({
-		position: MN,
-		map: map,
-		title: 'MN (Ayers Rock)'
-	});
+	// var marker = new google.maps.Marker({
+	// 	position: MN,
+	// 	map: map,
+	// 	title: 'MN (Ayers Rock)'
+	// });
 
 	var infowindow = new google.maps.InfoWindow({
-		content:'<div id="content">'+
-				'<div id="siteNotice">'+
-				'</div>'+
-				'<h1 id="firstHeading" class="firstHeading">MN</h1>'+
-				'<div id="bodyContent">'+
-				'<p><b>MN</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-				'sandstone rock formation in the southern part of the '+
-				'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-				'south west of the nearest large town, Alice Springs; 450&#160;km '+
-				'(280&#160;mi) by road. Kata Tjuta and MN are the two major '+
-				'features of the MN - Kata Tjuta National Park. MN is '+
-				'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-				'Aboriginal people of the area. It has many springs, waterholes, '+
-				'rock caves and ancient paintings. MN is listed as a World '+
-				'Heritage Site.</p>'+
-				'<p>Attribution: MN, <a href="https://en.wikipedia.org/w/index.php?title=MN&oldid=297882194">'+
-				'https://en.wikipedia.org/w/index.php?title=MN</a> '+
-				'(last visited June 22, 2009).</p>'+
-				'</div>'+
-				'</div>'
+		// content:'<div id="content">'+
+		// 		'<div id="siteNotice">'+
+		// 		'</div>'+
+		// 		'<h1 id="firstHeading" class="firstHeading">MN</h1>'+
+		// 		'<div id="bodyContent">'+
+		// 		'<p><b>MN</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+		// 		'sandstone rock formation in the southern part of the '+
+		// 		'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+		// 		'south west of the nearest large town, Alice Springs; 450&#160;km '+
+		// 		'(280&#160;mi) by road. Kata Tjuta and MN are the two major '+
+		// 		'features of the MN - Kata Tjuta National Park. MN is '+
+		// 		'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+		// 		'Aboriginal people of the area. It has many springs, waterholes, '+
+		// 		'rock caves and ancient paintings. MN is listed as a World '+
+		// 		'Heritage Site.</p>'+
+		// 		'<p>Attribution: MN, <a href="https://en.wikipedia.org/w/index.php?title=MN&oldid=297882194">'+
+		// 		'https://en.wikipedia.org/w/index.php?title=MN</a> '+
+		// 		'(last visited June 22, 2009).</p>'+
+		// 		'</div>'+
+		// 		'</div>'
 	});
 
-	marker.addListener('click', function() {
-		infowindow.open(map, marker);
+	// marker.addListener('click', function() {
+	// 	infowindow.open(map, marker);
+	// });
+
+	$.getJSON('data?page=all', function(json) {
+
+		$.each(json.universities, function (key, data) {
+
+			var latLng = new google.maps.LatLng(data.lat, data.lng);
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map,
+				title: data.title
+			});
+
+			var details = data.website + ", " + data.phone + ".";
+
+			bindInfoWindow(marker, map, infowindow, details);
+
+		});
+
+		function bindInfoWindow(marker, map, infowindow, strDescription) {
+			google.maps.event.addListener(marker, 'click', function () {
+				infowindow.setContent(strDescription);
+				infowindow.open(map, marker);
+			});
+		}
 	});
 }
 </script>
@@ -147,7 +174,7 @@ var MNBoundary = [
 	{lng: -91.925,	lat: 44.275},
 	{lng: -91.85,	lat: 44.175},
 	{lng: -91.7,	lat: 44.125},
-	{lng: -91.6,	lat: 44.025},
+	{lng: -91.55,	lat: 44.03},
 	{lng: -91.425,	lat: 44},
 	{lng: -91.25,	lat: 43.8},
 	{lng: -91.275,	lat: 43.6},
