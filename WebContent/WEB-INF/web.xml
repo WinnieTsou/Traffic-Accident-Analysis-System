@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <welcome-file-list>  
-   <welcome-file>all</welcome-file> 
-  </welcome-file-list> 
-  
+  <welcome-file-list>
+    <welcome-file>all</welcome-file>
+  </welcome-file-list>
   <servlet>
     <servlet-name>ShowAll</servlet-name>
     <servlet-class>show.ShowAll</servlet-class>
@@ -12,6 +11,14 @@
     <servlet-name>ShowAll</servlet-name>
     <url-pattern>/all</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>Fetch</servlet-name>
+    <servlet-class>data.Fetch</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Fetch</servlet-name>
+    <url-pattern>/data</url-pattern>
+  </servlet-mapping> 
   <servlet>
     <servlet-name>ShowByCounty</servlet-name>
     <servlet-class>show.ShowByCounty</servlet-class>

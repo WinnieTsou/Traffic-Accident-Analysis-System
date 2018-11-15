@@ -1,4 +1,6 @@
-<div id="map" style="width: 100%; height: 400px; background-color: #dddddd;"><p>Google Map Not Loaded. :((</p></div>
+<div id="map" style="width: 100%; height: 400px; background-color: #dddddd;">
+	<p>Google Map is not loaded. :((</p>
+</div>
 
 <script>
 var map;
@@ -59,6 +61,63 @@ function initMap() {
 	marker.addListener('click', function() {
 		infowindow.open(map, marker);
 	});
+
+
+// Testing
+
+
+
+	 $.getJSON('data', function(json1) {
+	// var json1 = {
+	//     "universities": [
+	//         {
+	//             "title": "Aberystwyth University",
+	//             "website": "www.aber.ac.uk",
+	//             "phone": "+44 (0)1970 623 111",
+	//             "lat": 52.415524,
+	//             "lng": -4.063066},
+	//         {
+	//             "title": "Bangor University",
+	//             "website": "www.bangor.ac.uk",
+	//             "phone": "+44 (0)1248 351 151",
+	//             "lat": 53.229520,
+	//             "lng": -4.129987},
+	//         {
+	//             "title": "Cardiff Metropolitan University",
+	//             "website": "www.cardiffmet.ac.uk",
+	//             "phone": "+44 (0)2920 416 138",
+	//             "lat": 51.482708,
+	//             "lng": -3.165881}
+	//     ]
+	// };
+	$.each(json1.universities, function (key, data) {
+
+	    var latLng = new google.maps.LatLng(data.lat, data.lng);
+
+	    var marker = new google.maps.Marker({
+	        position: latLng,
+	        map: map,
+	        title: data.title
+	    });
+
+	    var details = data.website + ", " + data.phone + ".";
+
+	    bindInfoWindow(marker, map, infowindow, details);
+
+	});
+
+
+		function bindInfoWindow(marker, map, infowindow, strDescription) {
+			google.maps.event.addListener(marker, 'click', function () {
+				infowindow.setContent(strDescription);
+				infowindow.open(map, marker);
+			});
+		}
+
+	});
+
+// google.maps.event.addDomListener(window, 'load', initialize);
+
 }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAATfq2_60fgdqXMK6NP9FTKFLOltGwu3E&callback=initMap" async defer></script>
