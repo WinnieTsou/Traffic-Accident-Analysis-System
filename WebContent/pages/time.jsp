@@ -101,6 +101,28 @@
 <script type="text/javascript">
 $("div.checkbox label").css({"margin": "10px"});
 
+var polarChartByTotal = new Chart($("#polarChartByTotal").get(0),{
+	type: "polarArea",
+	data: {},
+	options: {}
+});
+var lineChartByMonth = new Chart($("#lineChartByMonth").get(0), {
+	type: "line",
+	data: {},
+	options: {}
+});
+var barChartByHoliday = new Chart($("#barChartByHoliday").get(0), {
+	type: "bar",
+	data: {},
+	options: {}
+});
+var barChartByDeath = new Chart($("#barChartByDeath").get(0), {
+	type: "bar",
+	data: {},
+	options: {}
+});
+
+
 $("form").submit(function(e){
 	e.preventDefault();
 
@@ -112,9 +134,20 @@ $("form").submit(function(e){
 		var urlTmp = url + "&chart=total";
 
 		$.get(urlTmp, function(data){
-			var total = $("#polarChartByTotal").get(0);
-			var totalData = data.polarChartByTotal;
-			var polarChartByTotal = new Chart(total, totalData);
+			// $.each(data, function(i){
+			// 	polarChartByTotal.data.labels.push(data[i].year);
+			// 	polarChartByTotal.data.datasets.forEach((dataset)=>{
+			// 		dataset.data.push(data[i].count);
+			// 	});
+			// 	polarChartByTotal.update();
+			// });
+
+			removeData(polarChartByTotal);
+			addData(polarChartByTotal, ['Red','Yellow','Blue'], [{
+			    data: [10, 20, 30]
+			}]);
+
+			console.log(polarChartByTotal.data);
 		});
 
 		urlTmp = url + "&chart=month";
@@ -143,4 +176,31 @@ $("form").submit(function(e){
 		$("#myChart").css({"display": "none"});
 	}
 });
+</script>
+<script>
+function addData(chart, labelArray, datasetArray) {
+
+	labelArray.forEach((label) => {
+		chart.data.labels.push(label);
+	});
+
+	datasetArray.forEach((datasetObject) => {
+		chart.data.datasets.push(datasetObject);
+	});
+
+    // chart.data.labels.push(label);
+    // chart.data.datasets.forEach((dataset) => {
+    //     dataset.data.push(data);
+    // });
+    chart.update();
+}
+
+function removeData(chart) {
+    chart.data.labels.pop();
+	chart.data.datasets.pop();    //my
+    // chart.data.datasets.forEach((dataset) => {
+    //     dataset.data.pop();
+    // });
+    chart.update();
+}
 </script>
