@@ -7,8 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import JSON.JSONArray;
-import JSON.JSONObject;
+import JSON.*;
 
 @WebServlet("/QueryData")
 public class QueryData extends HttpServlet {
@@ -28,7 +27,9 @@ public class QueryData extends HttpServlet {
 		case "all":
 			all(request, response);
 			break;
-
+		case "time":
+			time(request, response);
+			break;
 		default:
 			break;
 		}
@@ -69,18 +70,32 @@ public class QueryData extends HttpServlet {
 	private void all(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		JSONArray resultArray = SQLQuery("SELECT * FROM `CS485_Project`.`case` WHERE 1;");
-
 		response.getWriter().append(resultArray.toString());
+	}
 
-//		locationObj = new JSONObject();
-//		JSONObject location;
-//		location = new JSONObject();
-//		location.put("title", "Aberystwyth University");
-//		location.put("website", "www.aber.ac.uk");
-//		location.put("phone", "+44 (0)1970 623 111");
-//		location.put("lat", "52.415524");
-//		location.put("lng", "-4.063066");
-//		locationObj.append("location", location);
-//		response.getWriter().append(locationObj.toString());
+	private void time(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] years = request.getParameterValues("year");
+
+		switch (request.getParameter("chart")) {
+		case "total":
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT YEAR(`accident_date`) AS 'year', count(*) AS 'count' ");
+			sql.append(" FROM `CS485_Project`.`case` WHERE ");
+			for (String year : years)
+				sql.append("YEAR(`accident_date`) = " + year + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY YEAR(`accident_date`);");
+			System.out.println(sql.toString());
+			JSONArray resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		case "month":
+			break;
+		case "holiday":
+			break;
+		case "death":
+			break;
+		}
 	}
 }
