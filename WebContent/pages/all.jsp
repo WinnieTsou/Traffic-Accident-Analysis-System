@@ -64,9 +64,9 @@ function initMap() {
 
 	$.getJSON('data?page=all', function(json) {
 
-		$.each(json.universities, function (key, data) {
+		$.each(json, function (key, data) {
 
-			var latLng = new google.maps.LatLng(data.lat, data.lng);
+			var latLng = new google.maps.LatLng(data.latitude, data.longitude);
 			var marker = new google.maps.Marker({
 				position: latLng,
 				map: map,
