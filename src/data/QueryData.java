@@ -76,10 +76,12 @@ public class QueryData extends HttpServlet {
 	private void time(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String[] years = request.getParameterValues("year");
+		StringBuilder sql;
+		JSONArray resultArray;
 
 		switch (request.getParameter("chart")) {
 		case "total":
-			StringBuilder sql = new StringBuilder();
+			sql = new StringBuilder();
 			sql.append("SELECT YEAR(`accident_date`) AS 'year', count(*) AS 'count' ");
 			sql.append(" FROM `CS485_Project`.`case` WHERE ");
 			for (String year : years)
@@ -87,10 +89,21 @@ public class QueryData extends HttpServlet {
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
 			sql.append("GROUP BY YEAR(`accident_date`);");
 			System.out.println(sql.toString());
-			JSONArray resultArray = SQLQuery(sql.toString());
+			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
 		case "month":
+			sql = new StringBuilder();
+			sql.append(
+					"SELECT YEAR(`accident_date`) AS 'year', MONTH(`accident_date`) AS 'month', count(*) AS 'count' ");
+			sql.append(" FROM `CS485_Project`.`case` WHERE ");
+			for (String year : years)
+				sql.append("YEAR(`accident_date`) = " + year + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY YEAR(`accident_date`), MONTH(`accident_date`) ORDER BY `year`, `month`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
 			break;
 		case "holiday":
 			break;
