@@ -99,35 +99,48 @@
 	</div>
 </div>
 <script type="text/javascript">
+$("div.checkbox label").css({"margin": "10px"});
+
 $("form").submit(function(e){
 	e.preventDefault();
 
 	if($(":checked").length!=0){
-		var checked = [];
-		$(":checked").each(function(){
-			checked.push($(this).val());
-		});
-
 		var url = "data?page=time";
-		$.get(url, function(data){
+		$(":checked").each(function(){
+			url += "&year=" + $(this).val();
+		});
+		var urlTmp = url + "&chart=total";
+
+		$.get(urlTmp, function(data){
 			var total = $("#polarChartByTotal").get(0);
 			var totalData = data.polarChartByTotal;
 			var polarChartByTotal = new Chart(total, totalData);
+		});
 
+		urlTmp = url + "&chart=month";
+		$.get(urlTmp, function(data){
 			var month = $("#lineChartByMonth").get(0);
 			var monthData = data.lineChartByMonth;
 			var lineChartByMonth = new Chart(month, monthData);
+		});
 
+		urlTmp = url + "&chart=holiday";
+		$.get(urlTmp, function(data){
 			var holiday = $("#barChartByHoliday").get(0);
 			var holidayData = data.barChartByHoliday;
 			var barChartByHoliday = new Chart(holiday, holidayData);
+		});
 
+		urlTmp = url + "&chart=death";
+		$.get(urlTmp, function(data){
 			var death = $("#barChartByDeath").get(0);
 			var deathData = data.barChartByDeath;
 			var barChartByDeath = new Chart(death, deathData);
 		});
-		
+
 		$("#myChart").css({"display": "block"});
+	} else {
+		$("#myChart").css({"display": "none"});
 	}
 });
 </script>

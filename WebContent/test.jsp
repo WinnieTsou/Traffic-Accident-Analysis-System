@@ -262,19 +262,31 @@ desired effect
 
 
 var ctx = document.getElementById("myBarChart").getContext("2d");
+// var data = {
+// 	labels: ["Snowy", "Rainy"],
+// 	datasets: [{
+// 		// label: "Winnie",
+// 		data: [1, 20],
+// 		backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)"],
+// 		borderColor: ["rgba(54, 162, 235,1)", "rgba(54, 162, 235, 1)"],
+// 		borderWidth: 1
+// 	}, {
+//     // label: "Andy",
+//     data: [5, 2],
+//     backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 99, 132, 0.2)"],
+//     borderColor: ["rgba(255,99,132,1)", "rgba(255, 99, 132, 1)"],
+//     borderWidth: 1
+//   }]
+// };
 var data = {
-	labels: ["Snowy", "Rainy"],
-	datasets: [{
-		label: "Winnie",
-		data: [1, 20],
-		backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(54, 162, 235, 0.2)"],
-		borderColor: ["rgba(54, 162, 235,1)", "rgba(54, 162, 235, 1)"],
-		borderWidth: 1
-	}, {
+ labels: ["Death"],
+ datasets: [{
+   label: "Winnie",
+   data: [1],
+   borderWidth: 1
+ }, {
     label: "Andy",
-    data: [5, 2],
-    backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 99, 132, 0.2)"],
-    borderColor: ["rgba(255,99,132,1)", "rgba(255, 99, 132, 1)"],
+    data: [5],
     borderWidth: 1
   }]
 };
@@ -297,7 +309,6 @@ var ctxPolarArea = document.getElementById("myPolarArea").getContext("2d");
 var dataPolar = {
 	labels: ["Snowy", "Rainy", "Cloudy"],
 	datasets: [{
-		label: "Weather",
 		data: [10, 20, 30],
 		backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe"],
 		borderColor: ["#000", "#000", "#000"],

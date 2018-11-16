@@ -179,6 +179,9 @@ $("form").submit(function(e){
 		});
 
 		$("#myChart").css({"display": "block"});
+	} else {
+		$("#myChart").css({"display": "none"});
+
 	}
 });
 
