@@ -35,28 +35,7 @@ function initMap() {
 	// 	title: 'MN (Ayers Rock)'
 	// });
 
-	var infowindow = new google.maps.InfoWindow({
-		// content:'<div id="content">'+
-		// 		'<div id="siteNotice">'+
-		// 		'</div>'+
-		// 		'<h1 id="firstHeading" class="firstHeading">MN</h1>'+
-		// 		'<div id="bodyContent">'+
-		// 		'<p><b>MN</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-		// 		'sandstone rock formation in the southern part of the '+
-		// 		'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-		// 		'south west of the nearest large town, Alice Springs; 450&#160;km '+
-		// 		'(280&#160;mi) by road. Kata Tjuta and MN are the two major '+
-		// 		'features of the MN - Kata Tjuta National Park. MN is '+
-		// 		'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-		// 		'Aboriginal people of the area. It has many springs, waterholes, '+
-		// 		'rock caves and ancient paintings. MN is listed as a World '+
-		// 		'Heritage Site.</p>'+
-		// 		'<p>Attribution: MN, <a href="https://en.wikipedia.org/w/index.php?title=MN&oldid=297882194">'+
-		// 		'https://en.wikipedia.org/w/index.php?title=MN</a> '+
-		// 		'(last visited June 22, 2009).</p>'+
-		// 		'</div>'+
-		// 		'</div>'
-	});
+	var infowindow = new google.maps.InfoWindow();
 
 	// marker.addListener('click', function() {
 	// 	infowindow.open(map, marker);
@@ -70,10 +49,18 @@ function initMap() {
 			var marker = new google.maps.Marker({
 				position: latLng,
 				map: map,
-				title: data.title
+				title: data.casenum
 			});
 
-			var details = data.website + ", " + data.phone + ".";
+			var details =
+				'<div id="content">'+
+				'<div id="siteNotice"></div>'+
+				'<h1 id="firstHeading" class="firstHeading">' + 'Case ID: ' + data.casenum + '</h1>'+
+				'<div id="bodyContent">'+
+				'<p>' + 'Happend Time: ' + data.accident_date.substring(0, data.accident_date.length - 5) + '</p>'+
+				'<p></p>'+
+				'</div>'+
+				'</div>';
 
 			bindInfoWindow(marker, map, infowindow, details);
 
