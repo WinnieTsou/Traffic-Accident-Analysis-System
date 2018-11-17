@@ -94,40 +94,92 @@ $("div.checkbox label").css({"margin": "10px"});
 
 $("form").submit(function(e){
 	e.preventDefault();
+	var barChartByTotal = new Chart($("#barChartByTotal").get(0), {
+		type: "bar",
+		data: {},
+		options: {}
+	});
+	var barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0), {
+		type: "bar",
+		data: {},
+		options: {}
+	});
+
+	var barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0), {
+		type: "bar",
+		data: {},
+		options: {}
+	});
+
 
 	if($(":checked").length!=0){
 		var url = "data?page=weather";
 		$(":checked").each(function(){
 			url += "&condition=" + $(this).val();
 		});
-		var urlTmp = url + "&chart=total";
 
-		$.get(urlTmp, function(data){
-			var total = $("#barChartByTotal").get(0);
-			var totalData = data.barChartByTotal;
-			var barChartByTotal = new Chart(total, totalData);
-		});
-		console.log(urlTmp);
+		var urlTmp = url + "&chart=total";
+		// $.get(urlTmp, function(data){
+		// 	addData(barChartByTotal, ["Winnie", "Andy"], [{
+		// 		data: [1, 4]
+		// 	}, {
+		// 		data: [3, 6]
+		// 	}]);
+		// });
+			addData(barChartByTotal, ["Hey"], [{
+				label: "Winnie",
+				data: [1]
+			}, {
+				label: "Andy",
+				data: [3]
+			}]);
 
 		urlTmp = url + "&chart=light";
-		$.get(urlTmp, function(data){
-			var weatherLight = $("#barChartByWeatherLight").get(0);
-			var weatherLightData = data.barChartByWeatherLight;
-			var barChartByWeatherLight = new Chart(weatherLight, weatherLightData);
-		});
-		console.log(urlTmp);
+		// $.get(urlTmp, function(data){
+			addData(barChartByWeatherLight, ["Winnie", "Andy"], [{
+				label: "123",
+				data: [3, 5]
+			}, {
+				label: "456",
+				data: [10, 6]
+			}]);
+		// });
 
 		urlTmp = url + "&chart=route";
 		$.get(urlTmp, function(data){
-			var weatherRoute = $("#barChartByWeatherRoute").get(0);
-			var weatherRouteData = data.barChartByWeatherRoute;
-			var barChartByWeatherRoute = new Chart(weatherRoute, weatherRouteData);
+
 		});
-		console.log(urlTmp);
 
 		$("#myChart").css({"display": "block"});
 	} else {
 		$("#myChart").css({"display": "none"});
 	}
 });
+</script>
+<script>
+function addData(chart, labelArray, datasetArray) {
+
+	labelArray.forEach((label) => {
+		chart.data.labels.push(label);
+	});
+
+	datasetArray.forEach((datasetObject) => {
+		chart.data.datasets.push(datasetObject);
+	});
+
+    // chart.data.labels.push(label);
+    // chart.data.datasets.forEach((dataset) => {
+    //     dataset.data.push(data);
+    // });
+    chart.update();
+}
+
+function removeData(chart) {
+    chart.data.labels.pop();
+	chart.data.datasets.pop();    //my
+    // chart.data.datasets.forEach((dataset) => {
+    //     dataset.data.pop();
+    // });
+    chart.update();
+}
 </script>

@@ -101,31 +101,14 @@
 <script type="text/javascript">
 $("div.checkbox label").css({"margin": "10px"});
 
-var polarChartByTotal = new Chart($("#polarChartByTotal").get(0),{
-	type: "polarArea",
-	data: {},
-	options: {}
-});
-var lineChartByMonth = new Chart($("#lineChartByMonth").get(0), {
-	type: "line",
-	data: {},
-	options: {}
-});
-var barChartByHoliday = new Chart($("#barChartByHoliday").get(0), {
-	type: "bar",
-	data: {},
-	options: {}
-});
-var barChartByDeath = new Chart($("#barChartByDeath").get(0), {
-	type: "bar",
-	data: {},
-	options: {}
-});
+var polarChartByTotal = new Chart($("#polarChartByTotal").get(0));
+var lineChartByMonth = new Chart($("#lineChartByMonth").get(0));
+var barChartByHoliday = new Chart($("#barChartByHoliday").get(0));
+var barChartByDeath = new Chart($("#barChartByDeath").get(0));
 
 
 $("form").submit(function(e){
 	e.preventDefault();
-
 	if($(":checked").length!=0){
 		var url = "data?page=time";
 		$(":checked").each(function(){
@@ -134,20 +117,36 @@ $("form").submit(function(e){
 		var urlTmp = url + "&chart=total";
 
 		$.get(urlTmp, function(data){
-			// $.each(data, function(i){
-			// 	polarChartByTotal.data.labels.push(data[i].year);
-			// 	polarChartByTotal.data.datasets.forEach((dataset)=>{
-			// 		dataset.data.push(data[i].count);
-			// 	});
-			// 	polarChartByTotal.update();
-			// });
+			polarChartByTotal.destroy();
+			polarChartByTotal = new Chart($("#polarChartByTotal").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [" "];
+			var datasetsArr = [];
 
-			removeData(polarChartByTotal);
-			addData(polarChartByTotal, ['Red','Yellow','Blue'], [{
-			    data: [10, 20, 30]
-			}]);
+			$.each(data, (i)=>{
+				var datatmp = {
+					label: "",
+					data: [],
+					backgroundColor: {}
+				}
+				datatmp.label = data[i].year;
+				datatmp.data.push(data[i].count);
+				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
+				datasetsArr.push(datatmp);			
+			});
 
-			console.log(polarChartByTotal.data);
+			addData(polarChartByTotal, labelArr, datasetsArr);
 		});
 
 		urlTmp = url + "&chart=month";
@@ -183,24 +182,14 @@ function addData(chart, labelArray, datasetArray) {
 	labelArray.forEach((label) => {
 		chart.data.labels.push(label);
 	});
-
-	datasetArray.forEach((datasetObject) => {
-		chart.data.datasets.push(datasetObject);
+	$.each(datasetArray, (i)=>{
+		chart.data.datasets.push(datasetArray[i]);
 	});
 
-    // chart.data.labels.push(label);
-    // chart.data.datasets.forEach((dataset) => {
-    //     dataset.data.push(data);
-    // });
     chart.update();
 }
 
-function removeData(chart) {
-    chart.data.labels.pop();
-	chart.data.datasets.pop();    //my
-    // chart.data.datasets.forEach((dataset) => {
-    //     dataset.data.pop();
-    // });
-    chart.update();
+function getRandomNumber(){
+	return Math.floor(Math.random()*256);
 }
 </script>
