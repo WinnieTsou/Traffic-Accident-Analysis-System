@@ -279,14 +279,20 @@ var ctx = document.getElementById("myBarChart").getContext("2d");
 //   }]
 // };
 var data = {
- labels: ["Death"],
+ labels: ["Death", "123555"],
  datasets: [{
    label: "Winnie",
-   data: [1],
+   data: [{
+    x: "123555",
+    y: 12
+   }],
    borderWidth: 1
  }, {
     label: "Andy",
-    data: [5],
+    data: [{
+      x: "123555",
+      y: 1
+    }],
     borderWidth: 1
   }]
 };
@@ -400,7 +406,8 @@ var lineChartData = {
   labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [{
       label: 'Electronics',
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: [
+      65, 59, 80, 81, 56, 55, 40],
       fill: false
     }]
 };

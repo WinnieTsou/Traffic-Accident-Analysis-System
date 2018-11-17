@@ -151,23 +151,150 @@ $("form").submit(function(e){
 
 		urlTmp = url + "&chart=month";
 		$.get(urlTmp, function(data){
-			var month = $("#lineChartByMonth").get(0);
-			var monthData = data.lineChartByMonth;
-			var lineChartByMonth = new Chart(month, monthData);
+			lineChartByMonth.destroy();
+			lineChartByMonth = new Chart($("#lineChartByMonth").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+			var datasetsArr = [];
+
+			var dataTemp = {};
+
+
+			$.each(data, (key, row)=>{
+				if(!Array.isArray(dataTemp[row.year]))
+					dataTemp[row.year] = [];
+				dataTemp[row.year][row.month - 1] = row.count;	
+			});
+			$.each(dataTemp, (key, row)=>{
+				var datatmp = {
+					label: key,
+					data: row
+				}
+				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
+
+				datasetsArr.push(datatmp);
+			});
+
+			addData(lineChartByMonth, labelArr, datasetsArr);
 		});
 
 		urlTmp = url + "&chart=holiday";
 		$.get(urlTmp, function(data){
-			var holiday = $("#barChartByHoliday").get(0);
-			var holidayData = data.barChartByHoliday;
-			var barChartByHoliday = new Chart(holiday, holidayData);
+			barChartByHoliday.destroy();
+			barChartByHoliday = new Chart($("#barChartByHoliday").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [];
+			var datasetsArr = [];
+			var dataTemp = {};
+
+			$.each(data, (key, row)=>{
+				if(labelArr.indexOf(row.holiday) == -1)
+					labelArr.push(row.holiday);
+			});
+			console.log(labelArr);
+
+			var length = $(":checked").length;
+			var yearArr = [];
+
+			$(":checked").each(function(i){
+				yearArr.push($(this).val());
+			});
+
+			var datatmp2 = [];
+			for(var j=0; j<yearArr.length; j++){
+				datatmp2[yearArr[j]] = [];
+			}
+
+			for(var j=0; j<yearArr.length; j++){
+				datatmp2[yearArr[j]] = [];
+				$.each(labelArr, (i)=>{
+					datatmp2[yearArr[j]][labelArr[i]] = 0;
+				});
+			}
+
+			$.each(data, (key, row)=>{
+				datatmp2[row.year][row.holiday] = row.count;
+			});
+			console.log(datatmp2);
+
+
+			var numeric_array = new Array();
+			for (var items in datatmp2["2017"]){
+			    numeric_array.push( datatmp2["2017"][items] );
+			}
+			console.log(numeric_array);
+
+			for(var i=0; i<length; i++){
+				var numeric_array = new Array();
+				for (var items in datatmp2[yearArr[i]]){
+				    numeric_array.push( datatmp2[yearArr[i]][items] );
+				}
+				var datatmp = {
+					label: yearArr[i],
+					data: numeric_array
+				}
+				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
+				console.log(datatmp);
+				datasetsArr.push(datatmp);
+			}
+
+			addData(barChartByHoliday, labelArr, datasetsArr);
 		});
 
 		urlTmp = url + "&chart=death";
 		$.get(urlTmp, function(data){
-			var death = $("#barChartByDeath").get(0);
-			var deathData = data.barChartByDeath;
-			var barChartByDeath = new Chart(death, deathData);
+			barChartByDeath.destroy();
+			barChartByDeath = new Chart($("#barChartByDeath").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [" "];
+			var datasetsArr = [];
+
+			$.each(data, (i)=>{
+				var datatmp = {
+					label: "",
+					data: [],
+					backgroundColor: {}
+				}
+				datatmp.label = data[i].year;
+				datatmp.data.push(data[i].died);
+				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
+				datasetsArr.push(datatmp);			
+			});
+
+			addData(barChartByDeath, labelArr, datasetsArr);
 		});
 
 		$("#myChart").css({"display": "block"});

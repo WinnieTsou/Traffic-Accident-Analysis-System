@@ -115,7 +115,7 @@ $("form").submit(function(e){
 	if($(":checked").length!=0){
 		var url = "data?page=weather";
 		$(":checked").each(function(){
-			url += "&condition=" + $(this).val();
+			url += "&type=" + $(this).val();
 		});
 
 		var urlTmp = url + "&chart=total";
