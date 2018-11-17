@@ -122,6 +122,19 @@ public class QueryData extends HttpServlet {
 			response.getWriter().append(resultArray.toString());
 			break;
 		case "death":
+			sql = new StringBuilder();
+			sql.append("SELECT YEAR(`time`) AS 'year', count(*) AS 'died' ");
+			sql.append("FROM `CS485_Project`.`died` WHERE ");
+			for (String year : years)
+				sql.append("YEAR(`time`) = " + year + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY YEAR(`time`) ORDER BY YEAR(`time`);");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
 			break;
 		}
 	}
