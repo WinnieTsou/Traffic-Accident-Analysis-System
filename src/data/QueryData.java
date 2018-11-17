@@ -30,6 +30,9 @@ public class QueryData extends HttpServlet {
 		case "time":
 			time(request, response);
 			break;
+		case "weather":
+			weather(request, response);
+			break;
 		default:
 			break;
 		}
@@ -110,12 +113,13 @@ public class QueryData extends HttpServlet {
 			sql.append(
 					"SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`id` AS 'h_id', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
 			sql.append("FROM `CS485_Project`.`case` ");
-			sql.append("LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
-			sql.append("WHERE `holiday_related` > 0 ");
-			// for (String year : years)
-			// 	sql.append("YEAR(`accident_date`) = " + year + " OR ");
-			// sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
-			sql.append("GROUP BY YEAR(`accident_date`), `holiday` ");
+			sql.append(
+					"LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
+			sql.append("WHERE `holiday_related` > 0  AND (");
+			for (String year : years)
+			sql.append("YEAR(`accident_date`) = " + year + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY YEAR(`accident_date`), `holiday` ");
 			sql.append("ORDER BY `year`, `case`.`holiday_related`;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
@@ -129,6 +133,33 @@ public class QueryData extends HttpServlet {
 				sql.append("YEAR(`time`) = " + year + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
 			sql.append("GROUP BY YEAR(`time`) ORDER BY YEAR(`time`);");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
+	}
+
+	private void weather(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String[] types = request.getParameterValues("type");
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		switch (request.getParameter("chart")) {
+		case "total":
+			sql = new StringBuilder();
+			sql.append("SELECT SUBSTRING(`casenum`, 1, 4) AS 'year', `weather_code` AS 'w_code', `description` AS 'weather', COUNT(`description`) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`weather` ");
+			sql.append("LEFT JOIN `CS485_Project`.`weather_code` ON `weather`.`weather_code` = `weather_code`.`id` WHERE ");
+			for (String type : types)
+				sql.append("`weather_code` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY `year`, `w_code` ORDER BY `year`, `w_code`;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
