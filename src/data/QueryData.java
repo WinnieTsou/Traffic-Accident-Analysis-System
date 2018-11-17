@@ -164,6 +164,23 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "light":
+			sql = new StringBuilder();
+			sql.append("SELECT `weather_code` AS 'w_code', `weather_code`.`description` AS 'weather', `case`.`light_condition` AS 'l_condition', `light_condition_code`.`description`, COUNT(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`weather` ");
+			sql.append("LEFT JOIN `CS485_Project`.`weather_code` ON `weather`.`weather_code` = `weather_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`case` ON `weather`.`casenum` = `case`.`casenum` ");
+			sql.append("LEFT JOIN `CS485_Project`.`light_condition_code` ON `case`.`light_condition` = `light_condition_code`.`id` ");
+			sql.append("WHERE (`case`.`light_condition` BETWEEN 0 AND 6) AND (");
+			for (String type : types)
+				sql.append("`weather_code` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `w_code`, `case`.`light_condition` ");
+			sql.append("ORDER BY `w_code`, `case`.`light_condition`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
