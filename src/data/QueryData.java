@@ -83,7 +83,7 @@ public class QueryData extends HttpServlet {
 		case "total":
 			sql = new StringBuilder();
 			sql.append("SELECT YEAR(`accident_date`) AS 'year', count(*) AS 'count' ");
-			sql.append(" FROM `CS485_Project`.`case` WHERE ");
+			sql.append("FROM `CS485_Project`.`case` WHERE ");
 			for (String year : years)
 				sql.append("YEAR(`accident_date`) = " + year + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
@@ -96,7 +96,7 @@ public class QueryData extends HttpServlet {
 			sql = new StringBuilder();
 			sql.append(
 					"SELECT YEAR(`accident_date`) AS 'year', MONTH(`accident_date`) AS 'month', count(*) AS 'count' ");
-			sql.append(" FROM `CS485_Project`.`case` WHERE ");
+			sql.append("FROM `CS485_Project`.`case` WHERE ");
 			for (String year : years)
 				sql.append("YEAR(`accident_date`) = " + year + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
@@ -106,6 +106,20 @@ public class QueryData extends HttpServlet {
 			response.getWriter().append(resultArray.toString());
 			break;
 		case "holiday":
+			sql = new StringBuilder();
+			sql.append(
+					"SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
+			sql.append("FROM `CS485_Project`.`case` ");
+			sql.append("LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
+			sql.append("WHERE `holiday_related` > 0 ");
+			// for (String year : years)
+			// 	sql.append("YEAR(`accident_date`) = " + year + " OR ");
+			// sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY YEAR(`accident_date`), `holiday` ");
+			sql.append("ORDER BY `year`, `case`.`holiday_related`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
 			break;
 		case "death":
 			break;
