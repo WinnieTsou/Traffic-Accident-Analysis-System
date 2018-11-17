@@ -108,7 +108,7 @@ public class QueryData extends HttpServlet {
 		case "holiday":
 			sql = new StringBuilder();
 			sql.append(
-					"SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
+					"SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`id` AS 'h_id', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
 			sql.append("FROM `CS485_Project`.`case` ");
 			sql.append("LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
 			sql.append("WHERE `holiday_related` > 0 ");
