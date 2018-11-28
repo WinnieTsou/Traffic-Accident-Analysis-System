@@ -201,64 +201,61 @@ $("form").submit(function(e){
 							ticks: {
 								beginAtZero:true
 							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
 						}]
 					}
 				}
 			});
 			var labelArr = [];
 			var datasetsArr = [];
-			var dataTemp = {};
+			var dataTemp = [];
 
-			$.each(data, (key, row)=>{
+			$.each(data, (key, row) => {
 				if(labelArr.indexOf(row.holiday) == -1)
-					labelArr.push(row.holiday);
-			});
-			console.log(labelArr);
-
-			var length = $(":checked").length;
-			var yearArr = [];
-
-			$(":checked").each(function(i){
-				yearArr.push($(this).val());
+					labelArr[row.h_id] = row.holiday;
 			});
 
-			var datatmp2 = [];
-			for(var j=0; j<yearArr.length; j++){
-				datatmp2[yearArr[j]] = [];
-			}
 
-			for(var j=0; j<yearArr.length; j++){
-				datatmp2[yearArr[j]] = [];
-				$.each(labelArr, (i)=>{
-					datatmp2[yearArr[j]][labelArr[i]] = 0;
-				});
-			}
-
-			$.each(data, (key, row)=>{
-				datatmp2[row.year][row.holiday] = row.count;
+			$.each(data, (key, row) => {
+				if(!Array.isArray(dataTemp[row.year]))
+					dataTemp[row.year] = [];
+				dataTemp[row.year][row.h_id] = row.count;
 			});
-			console.log(datatmp2);
 
+			$.each(dataTemp, (key, row) => {
+				if (row != null) {
 
-			var numeric_array = new Array();
-			for (var items in datatmp2["2017"]){
-			    numeric_array.push( datatmp2["2017"][items] );
-			}
-			console.log(numeric_array);
+					var dataRow = [];
 
-			for(var i=0; i<length; i++){
-				var numeric_array = new Array();
-				for (var items in datatmp2[yearArr[i]]){
-				    numeric_array.push( datatmp2[yearArr[i]][items] );
+					$.each(labelArr, (key, value) => {
+						if(value != null) {
+							if(row[key] != null)
+								dataRow[key] = row[key];
+							else
+								dataRow[key] = 0;
+						}
+					});
+
+					dataRow = dataRow.filter((element) => { return element != null; });
+
+					datasetsArr.push({
+						label: key,
+						data: dataRow,
+						backgroundColor: "rgba(" + 
+							getRandomNumber() + "," +
+							getRandomNumber() + "," +
+							getRandomNumber() + ",0.4)"
+					});
 				}
-				var datatmp = {
-					label: yearArr[i],
-					data: numeric_array
-				}
-				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
-				console.log(datatmp);
-				datasetsArr.push(datatmp);
-			}
+			});
+
+			labelArr = labelArr.filter((element) => { return element != null; });
 
 			addData(barChartByHoliday, labelArr, datasetsArr);
 		});

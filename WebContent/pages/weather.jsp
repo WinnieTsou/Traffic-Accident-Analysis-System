@@ -66,7 +66,6 @@
 		</div>
 		<!-- /.box -->
 	</div>
-
 	<div class="col-md-12">
 		<!-- put chart here -->
 		<!-- BAR CHART -->
@@ -94,22 +93,9 @@ $("div.checkbox label").css({"margin": "10px"});
 
 $("form").submit(function(e){
 	e.preventDefault();
-	var barChartByTotal = new Chart($("#barChartByTotal").get(0), {
-		type: "bar",
-		data: {},
-		options: {}
-	});
-	var barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0), {
-		type: "bar",
-		data: {},
-		options: {}
-	});
-
-	var barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0), {
-		type: "bar",
-		data: {},
-		options: {}
-	});
+	var barChartByTotal = new Chart($("#barChartByTotal").get(0));
+	var barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0));
+	var barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0));
 
 
 	if($(":checked").length!=0){
@@ -119,31 +105,150 @@ $("form").submit(function(e){
 		});
 
 		var urlTmp = url + "&chart=total";
-		// $.get(urlTmp, function(data){
-		// 	addData(barChartByTotal, ["Winnie", "Andy"], [{
-		// 		data: [1, 4]
-		// 	}, {
-		// 		data: [3, 6]
-		// 	}]);
-		// });
-			addData(barChartByTotal, ["Hey"], [{
-				label: "Winnie",
-				data: [1]
-			}, {
-				label: "Andy",
-				data: [3]
-			}]);
+		$.get(urlTmp, function(data){
+			barChartByTotal.destroy();
+			barChartByTotal = new Chart($("#barChartByTotal").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
+						}]
+					}
+				}
+			});
+
+			var labelArr = [];
+			var dataArr = [];
+			var datasetsArr = [];
+
+			$.each(data, (key, row)=>{
+				if(labelArr.indexOf(row.weather) == -1){
+					labelArr[row.w_code] = row.weather;
+				}
+			});
+
+			$.each(data, (key, row)=>{
+				if(!Array.isArray(dataArr[row.year])){
+					dataArr[row.year] = [];
+				}
+				dataArr[row.year][row.w_code] = row.count;
+			});
+
+			$.each(dataArr, (key, row)=>{
+				if(row!=null){
+
+					var dataRow = [];
+
+					$.each(labelArr, (key, value)=>{
+						if(value != null){
+							if(row[key] == null){
+								dataRow[key] = 0;
+							} else {
+								dataRow[key] = row[key];
+							}
+						}
+					});
+					dataRow = dataRow.filter((element) => { return element != null; });
+
+					datasetsArr.push({
+						label: key,
+						data: dataRow,
+						backgroundColor: "rgba(" + 
+							getRandomNumber() + "," +
+							getRandomNumber() + "," +
+							getRandomNumber() + ",0.4)"
+					});
+				}
+			});
+			addData(barChartByTotal, labelArr, datasetsArr);
+		});
+
 
 		urlTmp = url + "&chart=light";
-		// $.get(urlTmp, function(data){
-			addData(barChartByWeatherLight, ["Winnie", "Andy"], [{
-				label: "123",
-				data: [3, 5]
-			}, {
-				label: "456",
-				data: [10, 6]
-			}]);
-		// });
+		$.get(urlTmp, (data)=>{
+			barChartByWeatherLight.destroy();
+			barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [];
+			var dataArr = [];
+			var datasetsArr = [];
+			var labels = [];
+			$.each(data, (key, row)=>{
+				if(labelArr.indexOf(row.description) == -1){
+					labelArr[row.l_condition] = row.description;
+				}
+				if(!Array.isArray(dataArr[row.w_code])){
+					dataArr[row.w_code] = [];
+				}
+				dataArr[row.w_code][row.l_condition] = row.count;
+				if(labels.indexOf(row.weather) == -1 ){
+					labels[row.w_code] = row.weather;
+				}
+			});
+			// console.log(labelArr);
+			// console.log(dataArr);
+			// console.log(labels);
+
+			$.each(dataArr, (key, row)=>{
+				if (row != null) {
+
+					var dataRow = [];
+
+					$.each(labelArr, (key, value) => {
+						if(value != null) {
+							if(row[key] != null)
+								dataRow[key] = row[key];
+							else
+								dataRow[key] = 0;
+						}
+					});
+
+					dataRow = dataRow.filter((element) => { return element != null; });
+
+					console.log(labels[key]);
+					console.log(dataRow);
+
+					datasetsArr.push({
+						label: labels[key],
+						data: dataRow,
+						backgroundColor: "rgba(" + 
+							getRandomNumber() + "," +
+							getRandomNumber() + "," +
+							getRandomNumber() + ",0.4)"
+					});
+				}
+			});
+			addData(barChartByWeatherLight, labelArr, datasetsArr);
+		});
 
 		urlTmp = url + "&chart=route";
 		$.get(urlTmp, function(data){
@@ -166,20 +271,17 @@ function addData(chart, labelArray, datasetArray) {
 	datasetArray.forEach((datasetObject) => {
 		chart.data.datasets.push(datasetObject);
 	});
-
-    // chart.data.labels.push(label);
-    // chart.data.datasets.forEach((dataset) => {
-    //     dataset.data.push(data);
-    // });
     chart.update();
 }
 
 function removeData(chart) {
     chart.data.labels.pop();
-	chart.data.datasets.pop();    //my
-    // chart.data.datasets.forEach((dataset) => {
-    //     dataset.data.pop();
-    // });
+	chart.data.datasets.pop();
     chart.update();
+}
+
+
+function getRandomNumber(){
+	return Math.floor(Math.random()*256);
 }
 </script>
