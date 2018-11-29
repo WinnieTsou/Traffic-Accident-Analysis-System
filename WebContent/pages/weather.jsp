@@ -214,9 +214,75 @@ $("form").submit(function(e){
 					labels[row.w_code] = row.weather;
 				}
 			});
-			// console.log(labelArr);
-			// console.log(dataArr);
-			// console.log(labels);
+
+			$.each(dataArr, (key, row)=>{
+				if (row != null) {
+
+					var dataRow = [];
+
+					$.each(labelArr, (key, value) => {
+						if(value != null) {
+							if(row[key] != null)
+								dataRow[key] = row[key];
+							else
+								dataRow[key] = 0;
+						}
+					});
+
+					dataRow = dataRow.filter((element) => { return element != null; });
+
+					datasetsArr.push({
+						label: labels[key],
+						data: dataRow,
+						backgroundColor: "rgba(" + 
+							getRandomNumber() + "," +
+							getRandomNumber() + "," +
+							getRandomNumber() + ",0.4)"
+					});
+				}
+			});
+			addData(barChartByWeatherLight, labelArr, datasetsArr);
+		});
+
+		urlTmp = url + "&chart=route";
+		$.get(urlTmp, function(data){
+			barChartByWeatherRoute.destroy();
+			barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [];
+			var dataArr = [];
+			var datasetsArr = [];
+			var labels = [];
+			$.each(data, (key, row)=>{
+				if(labelArr.indexOf(row.route_signing) == -1){
+					labelArr[row.r_code] = row.route_signing;
+				}
+				if(!Array.isArray(dataArr[row.w_code])){
+					dataArr[row.w_code] = [];
+				}
+				dataArr[row.w_code][row.r_code] = row.count;
+				if(labels.indexOf(row.weather) == -1 ){
+					labels[row.w_code] = row.weather;
+				}
+			});
 
 			$.each(dataArr, (key, row)=>{
 				if (row != null) {
@@ -247,12 +313,7 @@ $("form").submit(function(e){
 					});
 				}
 			});
-			addData(barChartByWeatherLight, labelArr, datasetsArr);
-		});
-
-		urlTmp = url + "&chart=route";
-		$.get(urlTmp, function(data){
-
+			addData(barChartByWeatherRoute, labelArr, datasetsArr);			
 		});
 
 		$("#myChart").css({"display": "block"});

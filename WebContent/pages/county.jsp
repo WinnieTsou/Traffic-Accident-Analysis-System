@@ -146,37 +146,12 @@ $("form").submit(function(e){
 	e.preventDefault();
 
 	if($(":selected").length!=0){
-		var selected = [];
-		$(":selected").each(function(){
-			selected.push($(this).val());
-		});
-
 		var url = "data?page=county";
-		$.get(url, function(data){
-			var total = $("#barChartByTotal").get(0);
-			var totalData = data.totalData;
-			var barChartByTotal = new Chart(total, totalData);
-
-			var weather = $("#barChartByWeather").get(0);
-			var weatherData = data.weatherData;
-			var barChartByWeather = new Chart(weather, weatherData);
-
-			var death = $("#barChartByDeath").get(0);
-			var deathData = data.deathData;
-			var barChartByWeather = new Chart(death, deathData);
-
-			var season = $("#areaChartBySeason").get(0);
-			var seasonData = data.seasonData;
-			var areaChartBySeason = new Chart(season, seasonData);
-
-			var drugOrAlcohol = $("#radarChartByDrugOrAlcohol").get(0);
-			var drugOrAlcoholData = data.drugOrAlcoholData;
-			var radarChartByDrugOrAlcohol = new Chart(drugOrAlcohol, drugOrAlcoholData);
-
-			var speeding = $("#doughnutChartBySpeed").get(0);
-			var speedingData = data.speedingData;
-			var doughnutChartBySpeed = new Chart(death, speedingData);			
+		$(":selected").each(function(){
+			url += "&county=" + $(this).val();
 		});
+		console.log(url);
+
 
 		$("#myChart").css({"display": "block"});
 	} else {
