@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 <div id="myChart" class="row" style="display: none;">
 	<!-- Total -->
-	<div class="col-md-12">
+	<div class="col-md-6">
 		<!-- put chart here -->
 		<!-- BAR CHART -->
 		<div class="box box-success">
@@ -54,50 +54,8 @@ $(document).ready(function(){
 	</div>
 
 
-	<!-- Drug -->
-	<div class="col-md-6">
-		<!-- PIE CHART -->
-		<div class="box box-success">
-			<div class="box-header with-border">
-				<h3 class="box-title">Drug</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-					</button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-				</div>
-			</div>
-			<div class="box-body">
-				<div class="chart">
-					<canvas id="pieChartByDrug"></canvas>
-				</div>
-			</div>
-		</div>
-		<!-- /.box -->
-	</div>
-
-	<!-- Alcohol -->
-	<div class="col-md-6">
-		<!-- PIE CHART -->
-		<div class="box box-success">
-			<div class="box-header with-border">
-				<h3 class="box-title">Alcohol</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-					</button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-				</div>
-			</div>
-			<div class="box-body">
-				<div class="chart">
-					<canvas id="pieChartByAlcohol"></canvas>
-				</div>
-			</div>
-		</div>
-		<!-- /.box -->
-	</div>
-
 	<!-- Speeding -->
-	<div class="col-md-12">
+	<div class="col-md-6">
 		<!-- DOUGHNUT CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
@@ -120,8 +78,6 @@ $(document).ready(function(){
 <script type="text/javascript">
 
 var barChartByTotal = new Chart($("#barChartByTotal").get(0));
-var pieChartByDrug = new Chart($("#pieChartByDrug").get(0));
-var pieChartByAlcohol = new Chart($("#pieChartByAlcohol").get(0));
 var doughnutChartBySpeeding = new Chart($("#doughnutChartBySpeeding").get(0));
 
 
@@ -151,33 +107,37 @@ $("form").submit(function(e){
 				}
 			});
 			var labelArr = [];
+			var dataArr = [];
 			var datasetsArr = [];
 
-			$.each(data, (key, row)=>{
-				datasetsArr.push({
-					label: row.c_name,
-					data: [row.count],
-					backgroundColor: "rgba(" + 
-						getRandomNumber() + "," +
-						getRandomNumber() + "," +
-						getRandomNumber() + ",0.4)"
-				});
+			$(":selected").each(function(){
+				labelArr[$(this).val()] = $(this).text();
 			});
+			$.each(labelArr, function(i){
+				if(labelArr[i] != null){
+					var dataTmp = 0;
+					$.each(data, (key, row)=>{
+						if(row.c_name == labelArr[i]){
+							dataTmp = row.count;
+						}
+					});
 
-			addData(barChartByTotal, labelArr, datasetsArr);
+					var dataRow = [];
+					dataRow.push(dataTmp);
+
+					datasetsArr.push({
+						label: labelArr[i],
+						data: dataRow,
+						backgroundColor: "rgba(" + 
+							getRandomNumber() + "," +
+							getRandomNumber() + "," +
+							getRandomNumber() + ",0.4)"
+					});
+				}
+			});
+			addData(barChartByTotal, [" "], datasetsArr);
 		});
 
-		urlTmp = url + "&chart=drug";
-		$.get(urlTmp, function(data){
-			pieChartByDrug.destroy();
-			pieChartByDrug = new Chart($("#pieChartByDrug").get(0),{
-				type: "pie",
-				data: {},
-				options: {}
-			});
-		});
-
-		urlTmp = url + "&chart=alcohol";
 
 		$("#myChart").css({"display": "block"});
 	} else {
