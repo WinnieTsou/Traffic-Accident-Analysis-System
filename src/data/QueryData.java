@@ -181,6 +181,23 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "route":
+			sql = new StringBuilder();
+			sql.append("SELECT `weather_code` AS 'w_code', `weather_code`.`description` AS 'weather', `case`.`route_signing` AS 'r_code', `route_signing_code`.`description` AS 'route_signing', COUNT(*) AS 'count'");
+			sql.append("FROM `CS485_Project`.`weather` ");
+			sql.append("LEFT JOIN `CS485_Project`.`weather_code` ON `weather`.`weather_code` = `weather_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`case` ON `weather`.`casenum` = `case`.`casenum` ");
+			sql.append("LEFT JOIN `CS485_Project`.`route_signing_code` ON `case`.`route_signing` = `route_signing_code`.`id` ");
+			sql.append("WHERE (`weather_code`.`id` > 0) AND (`case`.`route_signing` BETWEEN 0 AND 8) AND (");
+			for (String type : types)
+				sql.append("`weather_code` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `w_code`, `case`.`route_signing` ");
+			sql.append("ORDER BY `w_code`, `case`.`route_signing`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
