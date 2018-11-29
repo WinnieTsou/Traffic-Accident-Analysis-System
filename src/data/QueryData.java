@@ -27,6 +27,9 @@ public class QueryData extends HttpServlet {
 		case "all":
 			all(request, response);
 			break;
+		case "county":
+			county(request, response);
+			break;
 		case "time":
 			time(request, response);
 			break;
@@ -74,6 +77,26 @@ public class QueryData extends HttpServlet {
 
 		JSONArray resultArray = SQLQuery("SELECT * FROM `CS485_Project`.`case` WHERE 1;");
 		response.getWriter().append(resultArray.toString());
+	}
+
+	private void county(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		if(request.getParameter("chart") == null) {
+			resultArray = SQLQuery("SELECT `id`, `description` AS 'name' FROM `CS485_Project`.`county_code` WHERE `id` BETWEEN 1 AND 200;");
+			response.getWriter().append(resultArray.toString());
+			return;
+		}
+
+		switch (request.getParameter("chart")) {
+		case "total":
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
 	}
 
 	private void time(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
