@@ -91,11 +91,12 @@
 <script type="text/javascript">
 $("div.checkbox label").css({"margin": "10px"});
 
+var barChartByTotal = new Chart($("#barChartByTotal").get(0));
+var barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0));
+var barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0));
+
 $("form").submit(function(e){
 	e.preventDefault();
-	var barChartByTotal = new Chart($("#barChartByTotal").get(0));
-	var barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0));
-	var barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0));
 
 
 	if($(":checked").length!=0){
@@ -300,9 +301,6 @@ $("form").submit(function(e){
 
 					dataRow = dataRow.filter((element) => { return element != null; });
 
-					console.log(labels[key]);
-					console.log(dataRow);
-
 					datasetsArr.push({
 						label: labels[key],
 						data: dataRow,
@@ -340,7 +338,6 @@ function removeData(chart) {
 	chart.data.datasets.pop();
     chart.update();
 }
-
 
 function getRandomNumber(){
 	return Math.floor(Math.random()*256);

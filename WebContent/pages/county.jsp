@@ -2,6 +2,15 @@
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
+$(document).ready(function(){
+	var url = "data?page=county";
+	$.get(url, function(data){
+		var select = $("#select");
+		$.each(data, (key, row)=>{
+			select.append("<option value='"+row.id+"'>"+row.name+"</option>");
+		});
+	});
+});
 </script>
 <div class="box box-primary">
 	<!-- form start -->
@@ -10,9 +19,7 @@ $(document).ready(function() {
 			<!-- select -->
 			<div class="form-group">
 				<label>County</label>
-				<select class="form-control js-example-basic-multiple" multiple="multiple" name="state">
-  					<option value="AL">Alabama</option>
-					<option value="WY">Wyoming</option>
+				<select id="select" class="form-control js-example-basic-multiple" multiple="multiple" name="state">
 				</select>
 			</div>
 		</div>
@@ -24,8 +31,8 @@ $(document).ready(function() {
 </div>
 
 <div id="myChart" class="row" style="display: none;">
-	<!-- Left Hand Side -->
-	<div class="col-md-6">
+	<!-- Total -->
+	<div class="col-md-12">
 		<!-- put chart here -->
 		<!-- BAR CHART -->
 		<div class="box box-success">
@@ -44,11 +51,15 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<!-- /.box -->
+	</div>
 
-		<!-- BAR CHART -->
+
+	<!-- Drug -->
+	<div class="col-md-6">
+		<!-- PIE CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Weather</h3>
+				<h3 class="box-title">Drug</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -57,38 +68,19 @@ $(document).ready(function() {
 			</div>
 			<div class="box-body">
 				<div class="chart">
-					<canvas id="barChartByWeather"></canvas>
-				</div>
-			</div>
-		</div>
-		<!-- /.box -->
-
-		<!-- BAR CHART -->
-		<div class="box box-success">
-			<div class="box-header with-border">
-				<h3 class="box-title">Death</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-					</button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-				</div>
-			</div>
-			<div class="box-body">
-				<div class="chart">
-					<canvas id="barChartByDeath"></canvas>
+					<canvas id="pieChartByDrug"></canvas>
 				</div>
 			</div>
 		</div>
 		<!-- /.box -->
 	</div>
 
-
-	<!-- Right Hand Side -->
+	<!-- Alcohol -->
 	<div class="col-md-6">
-		<!-- Area CHART -->
+		<!-- PIE CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Season</h3>
+				<h3 class="box-title">Alcohol</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -97,31 +89,16 @@ $(document).ready(function() {
 			</div>
 			<div class="box-body">
 				<div class="chart">
-					<canvas id="areaChartBySeason"></canvas>
+					<canvas id="pieChartByAlcohol"></canvas>
 				</div>
 			</div>
 		</div>
 		<!-- /.box -->
+	</div>
 
-		<!-- Radar CHART -->
-		<div class="box box-success">
-			<div class="box-header with-border">
-				<h3 class="box-title">Drug/Alcohol</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-					</button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-				</div>
-			</div>
-			<div class="box-body">
-				<div class="chart">
-					<canvas id="radarChartByDrugOrAlcohol"></canvas>
-				</div>
-			</div>
-		</div>
-		<!-- /.box -->
-
-		<!-- Doughnut CHART -->
+	<!-- Speeding -->
+	<div class="col-md-12">
+		<!-- DOUGHNUT CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
 				<h3 class="box-title">Speeding</h3>
@@ -133,7 +110,7 @@ $(document).ready(function() {
 			</div>
 			<div class="box-body">
 				<div class="chart">
-					<canvas id="doughnutChartBySpeed"></canvas>
+					<canvas id="doughnutChartBySpeeding"></canvas>
 				</div>
 			</div>
 		</div>
@@ -141,6 +118,12 @@ $(document).ready(function() {
 	</div>
 </div>
 <script type="text/javascript">
+
+var barChartByTotal = new Chart($("#barChartByTotal").get(0));
+var pieChartByDrug = new Chart($("#pieChartByDrug").get(0));
+var pieChartByAlcohol = new Chart($("#pieChartByAlcohol").get(0));
+var doughnutChartBySpeeding = new Chart($("#doughnutChartBySpeeding").get(0));
+
 
 $("form").submit(function(e){
 	e.preventDefault();
@@ -150,8 +133,51 @@ $("form").submit(function(e){
 		$(":selected").each(function(){
 			url += "&county=" + $(this).val();
 		});
-		console.log(url);
 
+		var urlTmp = url + "&chart=total";
+		$.get(urlTmp, function(data){
+			barChartByTotal.destroy();
+			barChartByTotal = new Chart($("#barChartByTotal").get(0),{
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [];
+			var datasetsArr = [];
+
+			$.each(data, (key, row)=>{
+				datasetsArr.push({
+					label: row.c_name,
+					data: [row.count],
+					backgroundColor: "rgba(" + 
+						getRandomNumber() + "," +
+						getRandomNumber() + "," +
+						getRandomNumber() + ",0.4)"
+				});
+			});
+
+			addData(barChartByTotal, labelArr, datasetsArr);
+		});
+
+		urlTmp = url + "&chart=drug";
+		$.get(urlTmp, function(data){
+			pieChartByDrug.destroy();
+			pieChartByDrug = new Chart($("#pieChartByDrug").get(0),{
+				type: "pie",
+				data: {},
+				options: {}
+			});
+		});
+
+		urlTmp = url + "&chart=alcohol";
 
 		$("#myChart").css({"display": "block"});
 	} else {
@@ -160,4 +186,27 @@ $("form").submit(function(e){
 	}
 });
 
+</script>
+<script type="text/javascript">	
+function addData(chart, labelArray, datasetArray) {
+
+	labelArray.forEach((label) => {
+		chart.data.labels.push(label);
+	});
+
+	datasetArray.forEach((datasetObject) => {
+		chart.data.datasets.push(datasetObject);
+	});
+    chart.update();
+}
+
+function removeData(chart) {
+    chart.data.labels.pop();
+	chart.data.datasets.pop();
+    chart.update();
+}
+
+function getRandomNumber(){
+	return Math.floor(Math.random()*256);
+}
 </script>
