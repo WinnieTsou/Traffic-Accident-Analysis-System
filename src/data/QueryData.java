@@ -106,6 +106,22 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "speeding":
+			sql = new StringBuilder();
+			sql.append("SELECT `county_id`, `county_code`.`description` AS 'c_name', COUNT(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`vehicle` ");
+			sql.append("LEFT JOIN `CS485_Project`.`case` ON `vehicle`.`casenum` = `case`.`casenum` ");
+			sql.append("LEFT JOIN `CS485_Project`.`county_code` ON `case`.`county_id` = `county_code`.`id` ");
+			sql.append("WHERE `is_speeding` > 0  AND (");
+			for (String county : counties)
+				sql.append("`county_id` = " + county + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `county_id` ");
+			sql.append("ORDER BY `county_id`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
