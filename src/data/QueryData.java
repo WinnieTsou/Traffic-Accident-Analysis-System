@@ -81,6 +81,7 @@ public class QueryData extends HttpServlet {
 
 	private void county(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		String[] counties = request.getParameterValues("county");
 		StringBuilder sql;
 		JSONArray resultArray;
 
@@ -92,6 +93,18 @@ public class QueryData extends HttpServlet {
 
 		switch (request.getParameter("chart")) {
 		case "total":
+			sql = new StringBuilder();
+			sql.append("SELECT `county_id` AS 'c_id', `county_code`.`description` AS 'c_name', COUNT(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`case` ");
+			sql.append("LEFT JOIN `CS485_Project`.`county_code` ON `case`.`county_id` = `county_code`.`id` WHERE ");
+			for (String county : counties)
+				sql.append("`county_id` = " + county + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY `county_id` ");
+			sql.append("ORDER BY `county_id`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
 			break;
 		default:
 			response.getWriter().append("");
@@ -136,8 +149,7 @@ public class QueryData extends HttpServlet {
 			sql.append(
 					"SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`id` AS 'h_id', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
 			sql.append("FROM `CS485_Project`.`case` ");
-			sql.append(
-					"LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
 			sql.append("WHERE `holiday_related` > 0  AND (");
 			for (String year : years)
 			sql.append("YEAR(`accident_date`) = " + year + " OR ");
