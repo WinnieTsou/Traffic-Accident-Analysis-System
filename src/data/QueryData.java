@@ -38,6 +38,9 @@ public class QueryData extends HttpServlet {
 		case "drugAlcohol":
 			drugAlcohol(request, response);
 			break;
+		case "car":
+			car(request, response);
+			break;
 		default:
 			break;
 		}
@@ -310,6 +313,26 @@ public class QueryData extends HttpServlet {
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
+	}
+
+	private void car(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] types = request.getParameterValues("type");
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		if (request.getParameter("chart") == null) {
+			resultArray = SQLQuery("SELECT * FROM `CS485_Project`.`vehicle_manufacturer_code` WHERE `id` BETWEEN 0 AND 95 ORDER BY `id`;");
+			response.getWriter().append(resultArray.toString());
+			return;
+		}
+		switch (request.getParameter("chart")) {
+		case "total":
 			break;
 		default:
 			response.getWriter().append("");
