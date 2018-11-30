@@ -17,8 +17,7 @@ public class QueryData extends HttpServlet {
 		super();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		response.setContentType("application/json");
 
@@ -36,13 +35,15 @@ public class QueryData extends HttpServlet {
 		case "weather":
 			weather(request, response);
 			break;
+		case "drugAlcohol":
+			drugAlcohol(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		doGet(request, response);
 	}
@@ -85,7 +86,7 @@ public class QueryData extends HttpServlet {
 		StringBuilder sql;
 		JSONArray resultArray;
 
-		if(request.getParameter("chart") == null) {
+		if (request.getParameter("chart") == null) {
 			resultArray = SQLQuery("SELECT `id`, `description` AS 'name' FROM `CS485_Project`.`county_code` WHERE `id` BETWEEN 1 AND 200;");
 			response.getWriter().append(resultArray.toString());
 			return;
@@ -165,8 +166,7 @@ public class QueryData extends HttpServlet {
 			break;
 		case "month":
 			sql = new StringBuilder();
-			sql.append(
-					"SELECT YEAR(`accident_date`) AS 'year', MONTH(`accident_date`) AS 'month', count(*) AS 'count' ");
+			sql.append("SELECT YEAR(`accident_date`) AS 'year', MONTH(`accident_date`) AS 'month', count(*) AS 'count' ");
 			sql.append("FROM `CS485_Project`.`case` WHERE ");
 			for (String year : years)
 				sql.append("YEAR(`accident_date`) = " + year + " OR ");
@@ -178,13 +178,12 @@ public class QueryData extends HttpServlet {
 			break;
 		case "holiday":
 			sql = new StringBuilder();
-			sql.append(
-					"SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`id` AS 'h_id', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
+			sql.append("SELECT YEAR(`accident_date`) AS 'year', `holiday_code`.`id` AS 'h_id', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count' ");
 			sql.append("FROM `CS485_Project`.`case` ");
 			sql.append("LEFT JOIN `CS485_Project`.`holiday_code` ON `CS485_Project`.`case`.`holiday_related` = `holiday_code`.`id` ");
 			sql.append("WHERE `holiday_related` > 0  AND (");
 			for (String year : years)
-			sql.append("YEAR(`accident_date`) = " + year + " OR ");
+				sql.append("YEAR(`accident_date`) = " + year + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
 			sql.append(") GROUP BY YEAR(`accident_date`), `holiday` ");
 			sql.append("ORDER BY `year`, `case`.`holiday_related`;");
@@ -210,8 +209,7 @@ public class QueryData extends HttpServlet {
 		}
 	}
 
-	private void weather(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	private void weather(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String[] types = request.getParameterValues("type");
 		StringBuilder sql;
@@ -264,6 +262,36 @@ public class QueryData extends HttpServlet {
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
+	}
+
+	private void drugAlcohol(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		switch (request.getParameter("chart")) {
+		case "total":
+			sql = new StringBuilder("SELECT SUBSTRING(`casenum`, 1, 4) AS 'year', count(`result`) AS 'drug_count' FROM `CS485_Project`.`drug_test` WHERE `result` BETWEEN 100 AND 996 GROUP BY `year` ORDER BY `year`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+
+			sql = new StringBuilder("SELECT SUBSTRING(`casenum`, 1, 4) AS 'year', count(`result`) AS 'alcohol_count' FROM `CS485_Project`.`alcohol_test` WHERE `result` BETWEEN 1 AND 995 GROUP BY `year` ORDER BY `year`;");
+			System.out.println(sql.toString());
+			for (Object object : SQLQuery(sql.toString()))
+				resultArray.put((JSONObject) object);
+
+			response.getWriter().append(resultArray.toString());
+			break;
+		case "injury":
+			break;
+		case "dsex":
+			break;
+		case "asex":
 			break;
 		default:
 			response.getWriter().append("");
