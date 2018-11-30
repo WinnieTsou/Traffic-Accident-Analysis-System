@@ -74,11 +74,33 @@ $(document).ready(function(){
 		</div>
 		<!-- /.box -->
 	</div>
+
+
+	<!-- BAR CHART -->
+	<div class="col-md-12">
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Intersection</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="chart">
+					<canvas id="barChartByIntersection"></canvas>
+				</div>
+			</div>
+		</div>
+		<!-- /.box -->
+	</div>
 </div>
 <script type="text/javascript">
 
 var barChartByTotal = new Chart($("#barChartByTotal").get(0));
 var doughnutChartBySpeeding = new Chart($("#doughnutChartBySpeeding").get(0));
+var barChartByIntersection = new Chart($("#barChartByIntersection").get(0));
 
 
 $("form").submit(function(e){
@@ -180,6 +202,76 @@ $("form").submit(function(e){
 				backgroundColor: background
 			});
 			addData(doughnutChartBySpeeding, labelArr, datasetsArr);
+		});
+
+		urlTmp = url + "&chart=intersection";
+		$.get(urlTmp, (data)=>{
+			barChartByIntersection.destroy();
+			barChartByIntersection = new Chart($("#barChartByIntersection").get(0), {
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [];
+			var dataArr = [];
+			var labels = [];
+			var datasetsArr = [];
+
+			$.each(data, (key, row)=>{
+				if(labelArr.indexOf(row.i_type)==-1){
+					labelArr[row.i_code] = row.i_type;
+				}
+				if(!Array.isArray(dataArr[row.c_id])){
+					dataArr[row.c_id] = [];
+				}
+				dataArr[row.c_id][row.i_code] = row.count;
+				if(labels.indexOf(row.c_name)==-1){
+					labels[row.c_id] = row.c_name;
+				}
+			});
+
+			$.each(dataArr, (key, row)=>{
+				if (row != null) {
+
+					var dataRow = [];
+
+					$.each(labelArr, (key, value) => {
+						if(value != null) {
+							if(row[key] != null)
+								dataRow[key] = row[key];
+							else
+								dataRow[key] = 0;
+						}
+					});
+
+					dataRow = dataRow.filter((element) => { return element != null; });
+
+					datasetsArr.push({
+						label: labels[key],
+						data: dataRow,
+						backgroundColor: "rgba(" + 
+							getRandomNumber() + "," +
+							getRandomNumber() + "," +
+							getRandomNumber() + ",0.4)"
+					});
+				}
+			});
+			addData(barChartByIntersection, labelArr, datasetsArr);
 		});
 
 		$("#myChart").css({"display": "block"});
