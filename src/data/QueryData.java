@@ -288,10 +288,16 @@ public class QueryData extends HttpServlet {
 			response.getWriter().append(resultArray.toString());
 			break;
 		case "injury":
+
 			break;
 		case "dsex":
+			sql = new StringBuilder("SELECT `sex` AS 'drug_sex', count(*) AS 'count' FROM `CS485_Project`.`drug_test` LEFT JOIN `CS485_Project`.`person` ON `drug_test`.`casenum` = `person`.`casenum` AND `drug_test`.`vnumber` = `person`.`vnumber` AND `drug_test`.`pnumber` = `person`.`pnumber` WHERE `result` BETWEEN 100 AND 996 GROUP BY `sex` ORDER BY `sex`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
 			break;
 		case "asex":
+
 			break;
 		default:
 			response.getWriter().append("");
