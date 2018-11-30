@@ -122,6 +122,22 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "intersection":
+			sql = new StringBuilder();
+			sql.append("SELECT `county_id` AS 'c_id', `county_code`.`description` AS 'c_name', `intersection_type` AS 'i_code', `intersection_type_code`.`description` AS 'i_type', COUNT(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`case` ");
+			sql.append("LEFT JOIN `CS485_Project`.`county_code` ON `case`.`county_id` = `county_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`intersection_type_code` ON `case`.`intersection_type` = `intersection_type_code`.`id` ");
+			sql.append("WHERE `intersection_type` < 11  AND (");
+			for (String county : counties)
+				sql.append("`county_id` = " + county + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `county_id`, `intersection_type` ");
+			sql.append("ORDER BY `county_id`, `intersection_type`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
