@@ -138,6 +138,49 @@ $("form").submit(function(e){
 			addData(barChartByTotal, [" "], datasetsArr);
 		});
 
+		urlTmp = url + "&chart=speeding";
+		$.get(urlTmp, function(data){
+			doughnutChartBySpeeding.destroy();
+			doughnutChartBySpeeding = new Chart($("#doughnutChartBySpeeding").get(0), {
+				type: "doughnut",
+				data: {},
+				options: {
+
+				}
+			});
+
+			var labelArr = [];
+			var dataArr = [];
+			var datasetsArr = [];
+
+			$(":selected").each(function(){
+				labelArr[$(this).val()] = $(this).text();
+			});
+			$.each(labelArr, (i)=>{
+				if(labelArr[i] != null){
+					var dataTmp = 0;
+					$.each(data, (key, row)=>{
+						if(i == row.county_id){
+							dataTmp = row.count;
+						}
+					});
+					dataArr.push(dataTmp);
+				}
+			});
+			dataArr = dataArr.filter((element) => { return element != null; });
+
+			var background = [];
+			$.each(labelArr, (i)=>{
+				background.push("rgba(" + getRandomNumber() + "," + getRandomNumber() + "," + getRandomNumber() + ",0.4)");
+			});
+
+			datasetsArr.push({
+				label: "",
+				data: dataArr,
+				backgroundColor: background
+			});
+			addData(doughnutChartBySpeeding, labelArr, datasetsArr);
+		});
 
 		$("#myChart").css({"display": "block"});
 	} else {

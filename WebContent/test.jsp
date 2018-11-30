@@ -257,7 +257,6 @@ desired effect
         </div>
 	      </div>
 
-
 <script>
 
 
