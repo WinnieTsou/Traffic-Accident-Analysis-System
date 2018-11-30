@@ -288,7 +288,16 @@ public class QueryData extends HttpServlet {
 			response.getWriter().append(resultArray.toString());
 			break;
 		case "injury":
+			sql = new StringBuilder("SELECT `injury` AS 'i_id', `description`, count(*) AS 'd_count' FROM `CS485_Project`.`person` LEFT JOIN `CS485_Project`.`injury_severity` ON `person`.`injury` = `injury_severity`.`id` LEFT JOIN `CS485_Project`.`drug_test` ON `person`.`casenum` = `drug_test`.`casenum` AND `person`.`vnumber` = `drug_test`.`vnumber` AND `person`.`pnumber` = `drug_test`.`pnumber` WHERE `result` BETWEEN 100 AND 996 GROUP BY `injury` ORDER BY `injury`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
 
+			sql = new StringBuilder("SELECT `injury` AS 'i_id', `description`, count(*) AS 'a_count' FROM `CS485_Project`.`person` LEFT JOIN `CS485_Project`.`injury_severity` ON `person`.`injury` = `injury_severity`.`id` LEFT JOIN `CS485_Project`.`alcohol_test` ON `person`.`casenum` = `alcohol_test`.`casenum` AND `person`.`vnumber` = `alcohol_test`.`vnumber` AND `person`.`pnumber` = `alcohol_test`.`pnumber` WHERE `result` BETWEEN 1 AND 995 GROUP BY `injury` ORDER BY `injury`;");
+			System.out.println(sql.toString());
+			for (Object object : SQLQuery(sql.toString()))
+				resultArray.put((JSONObject) object);
+
+			response.getWriter().append(resultArray.toString());
 			break;
 		case "dsex":
 			sql = new StringBuilder("SELECT `sex` AS 'drug_sex', count(*) AS 'count' FROM `CS485_Project`.`drug_test` LEFT JOIN `CS485_Project`.`person` ON `drug_test`.`casenum` = `person`.`casenum` AND `drug_test`.`vnumber` = `person`.`vnumber` AND `drug_test`.`pnumber` = `person`.`pnumber` WHERE `result` BETWEEN 100 AND 996 GROUP BY `sex` ORDER BY `sex`;");
