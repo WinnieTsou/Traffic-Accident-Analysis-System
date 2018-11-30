@@ -1,191 +1,261 @@
-<div class="box box-primary">
-	<!-- form start -->
-	<form role="form" action="ShowByDrugOrAlcohol">
-		<div class="box-body">
-			<div class="form-group">
-				<label>Drug/Alcohol</label>
-				<div class="checkbox">
-					<label><input type="checkbox" name="type" value="drug">Drug</label>
-					<label><input type="checkbox" name="type" value="alcohol">Alcohol</label>
-				</div>     
+
+
+<div id="myChart" class="row">
+	<!-- Total -->
+	<div class="col-md-6">
+		<!-- put chart here -->
+		<!-- BAR CHART -->
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Total</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="chart">
+					<canvas id="barChartByTotal"></canvas>
+				</div>
 			</div>
 		</div>
-		<div class="box-footer">
-			<button type="submit" class="btn btn-primary">Submit</button>
+		<!-- /.box -->
+
+		<!-- PIR CHART -->
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Drug on Sex</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="chart">
+					<canvas id="pieChartByDrugSex"></canvas>
+				</div>
+			</div>
 		</div>
-	</form>
+		<!-- /.box -->
+	</div>
+
+
+	<!-- Injury -->
+	<div class="col-md-6">
+		<!-- BAR CHART -->
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Injury</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="chart">
+					<canvas id="barChartByInjury"></canvas>
+				</div>
+			</div>
+		</div>
+		<!-- /.box -->
+
+		<!-- PIE CHART -->
+		<div class="box box-success">
+			<div class="box-header with-border">
+				<h3 class="box-title">Alcohol on Sex</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+					</button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="chart">
+					<canvas id="pieChartByAlcoholSex"></canvas>
+				</div>
+			</div>
+		</div>
+		<!-- /.box -->
+	</div>
+
 </div>
 
 <script type="text/javascript">
 $("div.checkbox label").css({"margin": "10px"});
 
-$("form").submit(function(e){
-	e.preventDefault();
-	// var barChartByTotal = new Chart($("#barChartByTotal").get(0));
-	// var barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0));
-	// var barChartByWeatherRoute = new Chart($("#barChartByWeatherRoute").get(0));
+var barChartByTotal = new Chart($("#barChartByTotal").get(0));
+var barChartByInjury = new Chart($("#barChartByInjury").get(0));
+var pieChartByDrugSex = new Chart($("#pieChartByDrugSex").get(0));
+var pieChartByAlcoholSex = new Chart($("#pieChartByAlcoholSex").get(0));
 
+var url = "data?page=drugAlcohol";
 
-	if($(":checked").length!=0){
-		var url = "data?page=drugAlcohol";
-		$(":checked").each(function(){
-			url += "&type=" + $(this).val();
-		});
-		console.log(url);
+var urlTmp = url + "&chart=total";
+$.get(urlTmp, function(data){
+	barChartByTotal.destroy();
+	barChartByTotal = new Chart($("#barChartByTotal").get(0), {
+		type: "bar",
+		data: {},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero:true
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						fontSize: 10,
+						padding: 0
+					}
+				}]
+			}
+		}
+	});
+	var labelArr = [];
+	var drug = [];
+	var alcohol = [];
+	var datasetsArr = [];
+	$.each(data, (key, row)=>{
+		if(row.drug_count != null){
+			drug[row.year] = row.drug_count;
+		} else if(row.alcohol_count != null){
+			alcohol[row.year] = row.alcohol_count;
+		}
+	});
+	drug = drug.filter((element) => { return element != null; });
+	alcohol = alcohol.filter((element) => { return element != null; });
 
-		// var urlTmp = url + "&chart=total";
-		// $.get(urlTmp, function(data){
-		// 	barChartByTotal.destroy();
-		// 	barChartByTotal = new Chart($("#barChartByTotal").get(0),{
-		// 		type: "bar",
-		// 		data: {},
-		// 		options: {
-		// 			scales: {
-		// 				yAxes: [{
-		// 					ticks: {
-		// 						beginAtZero:true
-		// 					}
-		// 				}],
-		// 				xAxes: [{
-		// 					ticks: {
-		// 						autoSkip: false,
-		// 						fontSize: 10,
-		// 						padding: 0
-		// 					}
-		// 				}]
-		// 			}
-		// 		}
-		// 	});
-
-		// 	var labelArr = [];
-		// 	var dataArr = [];
-		// 	var datasetsArr = [];
-
-		// 	$.each(data, (key, row)=>{
-		// 		if(labelArr.indexOf(row.weather) == -1){
-		// 			labelArr[row.w_code] = row.weather;
-		// 		}
-		// 	});
-
-		// 	$.each(data, (key, row)=>{
-		// 		if(!Array.isArray(dataArr[row.year])){
-		// 			dataArr[row.year] = [];
-		// 		}
-		// 		dataArr[row.year][row.w_code] = row.count;
-		// 	});
-
-		// 	$.each(dataArr, (key, row)=>{
-		// 		if(row!=null){
-
-		// 			var dataRow = [];
-
-		// 			$.each(labelArr, (key, value)=>{
-		// 				if(value != null){
-		// 					if(row[key] == null){
-		// 						dataRow[key] = 0;
-		// 					} else {
-		// 						dataRow[key] = row[key];
-		// 					}
-		// 				}
-		// 			});
-		// 			dataRow = dataRow.filter((element) => { return element != null; });
-
-		// 			datasetsArr.push({
-		// 				label: key,
-		// 				data: dataRow,
-		// 				backgroundColor: "rgba(" + 
-		// 					getRandomNumber() + "," +
-		// 					getRandomNumber() + "," +
-		// 					getRandomNumber() + ",0.4)"
-		// 			});
-		// 		}
-		// 	});
-		// 	addData(barChartByTotal, labelArr, datasetsArr);
-		// });
-
-
-		// urlTmp = url + "&chart=light";
-		// $.get(urlTmp, (data)=>{
-		// 	barChartByWeatherLight.destroy();
-		// 	barChartByWeatherLight = new Chart($("#barChartByWeatherLight").get(0),{
-		// 		type: "bar",
-		// 		data: {},
-		// 		options: {
-		// 			scales: {
-		// 				yAxes: [{
-		// 					ticks: {
-		// 						beginAtZero:true
-		// 					}
-		// 				}],
-		// 				xAxes: [{
-		// 					ticks: {
-		// 						autoSkip: false,
-		// 						fontSize: 10,
-		// 						padding: 0
-		// 					}
-		// 				}]
-		// 			}
-		// 		}
-		// 	});
-		// 	var labelArr = [];
-		// 	var dataArr = [];
-		// 	var datasetsArr = [];
-		// 	var labels = [];
-		// 	$.each(data, (key, row)=>{
-		// 		if(labelArr.indexOf(row.description) == -1){
-		// 			labelArr[row.l_condition] = row.description;
-		// 		}
-		// 		if(!Array.isArray(dataArr[row.w_code])){
-		// 			dataArr[row.w_code] = [];
-		// 		}
-		// 		dataArr[row.w_code][row.l_condition] = row.count;
-		// 		if(labels.indexOf(row.weather) == -1 ){
-		// 			labels[row.w_code] = row.weather;
-		// 		}
-		// 	});
-
-		// 	$.each(dataArr, (key, row)=>{
-		// 		if (row != null) {
-
-		// 			var dataRow = [];
-
-		// 			$.each(labelArr, (key, value) => {
-		// 				if(value != null) {
-		// 					if(row[key] != null)
-		// 						dataRow[key] = row[key];
-		// 					else
-		// 						dataRow[key] = 0;
-		// 				}
-		// 			});
-
-		// 			dataRow = dataRow.filter((element) => { return element != null; });
-
-		// 			console.log(labels[key]);
-		// 			console.log(dataRow);
-
-		// 			datasetsArr.push({
-		// 				label: labels[key],
-		// 				data: dataRow,
-		// 				backgroundColor: "rgba(" + 
-		// 					getRandomNumber() + "," +
-		// 					getRandomNumber() + "," +
-		// 					getRandomNumber() + ",0.4)"
-		// 			});
-		// 		}
-		// 	});
-		// 	addData(barChartByWeatherLight, labelArr, datasetsArr);
-		// });
-
-		// urlTmp = url + "&chart=route";
-		// $.get(urlTmp, function(data){
-
-		// });
-
-		$("#myChart").css({"display": "block"});
-	} else {
-		$("#myChart").css({"display": "none"});
-	}
+	datasetsArr.push({
+		label: "Drug",
+		data: drug,
+		backgroundColor: "rgba(" + 
+			getRandomNumber() + "," +
+			getRandomNumber() + "," +
+			getRandomNumber() + ",0.4)"
+	});
+	datasetsArr.push({
+		label: "Alcohol",
+		data: alcohol,
+		backgroundColor: "rgba(" + 
+			getRandomNumber() + "," +
+			getRandomNumber() + "," +
+			getRandomNumber() + ",0.4)"
+	});
+	addData(barChartByTotal, ["2015", "2016", "2017"], datasetsArr);
 });
+
+urlTmp = url + "&chart=dsex";
+$.get(urlTmp, (data)=>{
+	pieChartByDrugSex.destroy();
+
+	var drugData = {
+		labels: ["Male", "Female"],
+		datasets: [{
+			label: "",
+			data: [210, 65],
+			backgroundColor: [
+				"rgba(" + getRandomNumber() + "," +
+				getRandomNumber() + "," +
+				getRandomNumber() + ",0.4)", "rgba(" + 
+				getRandomNumber() + "," +
+				getRandomNumber() + "," +
+				getRandomNumber() + ",0.4)"]
+		}]
+	};
+	pieChartByDrugSex = new Chart($("#pieChartByDrugSex").get(0), {
+		type: 'pie',
+		data: drugData,
+		options: {}
+	});
+});
+
+urlTmp = url + "&chart=asex";
+$.get(urlTmp, (data)=>{
+	pieChartByAlcoholSex.destroy();
+
+	var alcoholData = {
+		labels: ["Male", "Female"],
+		datasets: [{
+			label: "",
+			data: [273, 49],
+			backgroundColor: [
+				"rgba(" + getRandomNumber() + "," +
+				getRandomNumber() + "," +
+				getRandomNumber() + ",0.4)", "rgba(" + 
+				getRandomNumber() + "," +
+				getRandomNumber() + "," +
+				getRandomNumber() + ",0.4)"]
+		}]
+	};
+	pieChartByAlcoholSex = new Chart($("#pieChartByAlcoholSex").get(0), {
+		type: 'pie',
+		data: alcoholData,
+		options: {}
+	});
+});
+
+urlTmp = url + "&chart=injury";
+$.get(urlTmp, (data)=>{
+	barChartByInjury.destroy();
+	barChartByInjury = new Chart($("#barChartByInjury").get(0), {
+		type: "bar",
+		data: {},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero:true
+					}
+				}],
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						fontSize: 12,
+						padding: 0
+					}
+				}]
+			}
+		}
+	});
+
+	var labelArr = [];
+	var drugData = [];
+	var alcoholData = [];
+	var datasetsArr = [];
+	$.each(data, (key, row)=>{
+		if(labelArr.indexOf(row.description)==-1){
+			labelArr[row.i_id] = row.description;
+		}
+		if(row.d_count!=null){
+			drugData[row.i_id] = row.d_count;
+		} else if(row.a_count!=null){
+			alcoholData[row.i_id] = row.a_count;
+		}
+	});
+	datasetsArr.push({
+		label: "Drug",
+		data: drugData,
+		backgroundColor: "rgba(" + 
+			getRandomNumber() + "," +
+			getRandomNumber() + "," +
+			getRandomNumber() + ",0.4)"
+	});
+	datasetsArr.push({
+		label: "Alcohol",
+		data: alcoholData,
+		backgroundColor: "rgba(" + 
+			getRandomNumber() + "," +
+			getRandomNumber() + "," +
+			getRandomNumber() + ",0.4)"
+	});
+	addData(barChartByInjury, labelArr, datasetsArr);	
+});
+
 </script>
 <script>
 function addData(chart, labelArray, datasetArray) {

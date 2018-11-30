@@ -244,7 +244,6 @@ $("form").submit(function(e){
 					labels[row.c_id] = row.c_name;
 				}
 			});
-
 			$.each(dataArr, (key, row)=>{
 				if (row != null) {
 
