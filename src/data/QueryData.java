@@ -431,22 +431,8 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
-		case "sex":
-			sql = new StringBuilder();
-			sql.append("SELECT `sex`, count(*) AS 'count' ");
-			sql.append("FROM `CS485_Project`.`died` ");
-			sql.append("LEFT JOIN `CS485_Project`.`person` ON `died`.`casenum` = `person`.`casenum` AND `died`.`vnumber` = `person`.`vnumber` AND `died`.`pnumber` = `person`.`pnumber` ");
-			sql.append("GROUP BY `sex` ORDER BY `sex`;");
-			System.out.println(sql.toString());
-			resultArray = SQLQuery(sql.toString());
-			response.getWriter().append(resultArray.toString());
-			break;
-		case "age":
-			sql = new StringBuilder();
-			sql.append("SELECT `age` DIV 10 * 10 AS 'age', count(*) AS 'count' ");
-			sql.append("FROM `CS485_Project`.`died` ");
-			sql.append("LEFT JOIN `CS485_Project`.`person` ON `died`.`casenum` = `person`.`casenum` AND `died`.`vnumber` = `person`.`vnumber` AND `died`.`pnumber` = `person`.`pnumber` ");
-			sql.append("GROUP BY `age` DIV 10 ORDER BY `age` DIV 10;");
+		case "caryear":
+			sql = new StringBuilder("SELECT `year` DIV 10 * 10 AS 'year', count(*) AS 'count' FROM `CS485_Project`.`died` LEFT JOIN `CS485_Project`.`vehicle` ON `died`.`casenum` = `vehicle`.`casenum` AND `died`.`vnumber` = `vehicle`.`vnumber` GROUP BY `year` DIV 10 ORDER BY `year` DIV 10;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
@@ -468,8 +454,25 @@ public class QueryData extends HttpServlet {
 
 			response.getWriter().append(resultArray.toString());
 			break;
-		case "alcohol":
-			
+		case "sex":
+			sql = new StringBuilder();
+			sql.append("SELECT `sex`, count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`died` ");
+			sql.append("LEFT JOIN `CS485_Project`.`person` ON `died`.`casenum` = `person`.`casenum` AND `died`.`vnumber` = `person`.`vnumber` AND `died`.`pnumber` = `person`.`pnumber` ");
+			sql.append("GROUP BY `sex` ORDER BY `sex`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		case "age":
+			sql = new StringBuilder();
+			sql.append("SELECT `age` DIV 10 * 10 AS 'age', count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`died` ");
+			sql.append("LEFT JOIN `CS485_Project`.`person` ON `died`.`casenum` = `person`.`casenum` AND `died`.`vnumber` = `person`.`vnumber` AND `died`.`pnumber` = `person`.`pnumber` ");
+			sql.append("GROUP BY `age` DIV 10 ORDER BY `age` DIV 10;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
 			break;
 		default:
 			response.getWriter().append("");
