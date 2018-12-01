@@ -393,6 +393,21 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "drug":
+			sql = new StringBuilder();
+			sql.append("SELECT `manufacturer` AS 'm_id', `vehicle_manufacturer_code`.`description`, `sex`, count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`vehicle` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle_manufacturer_code` ON `vehicle`.`manufacturer` = `vehicle_manufacturer_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`person` ON `vehicle`.`casenum` = `person`.`casenum` AND `vehicle`.`vnumber` = `person`.`vnumber` ");
+			sql.append("WHERE (`age` BETWEEN 1 AND 100) AND (`sex` BETWEEN 1 AND 2) AND (");
+			for (String type : types)
+				sql.append("`manufacturer` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `manufacturer`, `sex` ORDER BY `manufacturer`, `sex`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
@@ -435,6 +450,26 @@ public class QueryData extends HttpServlet {
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
+			break;
+		case "num":
+			sql = new StringBuilder("SELECT count(*) AS 'total_died' FROM `CS485_Project`.`died`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+
+			sql = new StringBuilder("SELECT count(*) AS 'drug_died' FROM `CS485_Project`.`died` LEFT JOIN `CS485_Project`.`drug_test` ON `died`.`casenum` = `drug_test`.`casenum` AND `died`.`vnumber` = `drug_test`.`vnumber` AND `died`.`pnumber` = `drug_test`.`pnumber` WHERE `drug_test`.`vnumber` BETWEEN 0 AND 999 AND `result` BETWEEN 100 AND 996;");
+			System.out.println(sql.toString());
+			for (Object object : SQLQuery(sql.toString()))
+				resultArray.put((JSONObject) object);
+
+			sql = new StringBuilder("SELECT count(*) AS 'alcohol_died' FROM `CS485_Project`.`died` LEFT JOIN `CS485_Project`.`alcohol_test` ON `died`.`casenum` = `alcohol_test`.`casenum` AND `died`.`vnumber` = `alcohol_test`.`vnumber` AND `died`.`pnumber` = `alcohol_test`.`pnumber` WHERE `alcohol_test`.`vnumber` BETWEEN 0 AND 999 AND `result` BETWEEN 1 AND 995;");
+			System.out.println(sql.toString());
+			for (Object object : SQLQuery(sql.toString()))
+				resultArray.put((JSONObject) object);
+
+			response.getWriter().append(resultArray.toString());
+			break;
+		case "alcohol":
+			
 			break;
 		default:
 			response.getWriter().append("");
