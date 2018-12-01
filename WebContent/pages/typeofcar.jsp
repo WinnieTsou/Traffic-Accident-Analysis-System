@@ -202,19 +202,42 @@ $("form").submit(function(e){
 			var labelArr = [];
 			var dataArr = [];
 			var datasetsArr = [];
+			var a_id = [];
 
-			// $(":selected").each(function(){
-			// 	labelArr[$(this).val()] = $(this).text();
-			// });
-
+			$(":selected").each(function(){
+				dataArr[$(this).text()] = [];
+			});
 			$.each(data, (key, row)=>{
 				if(labelArr.indexOf(row.a_name)==-1){
 					labelArr[row.a_id] = row.a_name;
 				}
+				if(a_id.indexOf(row.a_id) == -1){
+					a_id.push(row.a_id);
+				}
 			});
+			$.each(a_id, (i)=>{
+				for( var key in dataArr){
+					if(dataArr[key] != null)
+						dataArr[key][a_id[i]] = 0;
+				}
+			});
+			$.each(data, (key, row)=>{
+				dataArr[row.m_name][row.a_id] = row.count;
+			});	
+			for( var key in dataArr ){
+				var dataRow = [];
 
-			console.log(labelArr);	
-			console.log(data);
+				dataRow = dataArr[key].filter((element) => { return element != null; });
+				datasetsArr.push({
+					label: key,
+					data: dataRow,
+					backgroundColor: "rgba(" + 
+						getRandomNumber() + "," +
+						getRandomNumber() + "," +
+						getRandomNumber() + ",0.4)"
+				});
+			}
+			addData(barChartByAirbag, labelArr, datasetsArr);
 		});
 		$("#myChart").css({"display": "block"});
 	} else {
