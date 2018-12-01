@@ -209,7 +209,7 @@ $.get(urlTmp, (data)=>{
 				xAxes: [{
 					ticks: {
 						autoSkip: false,
-						fontSize: 12,
+						fontSize: 10,
 						padding: 0
 					}
 				}]
