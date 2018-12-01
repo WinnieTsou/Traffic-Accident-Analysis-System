@@ -159,12 +159,9 @@ $.get(urlTmp, (data)=>{
 			label: "",
 			data: [210, 65],
 			backgroundColor: [
-				"rgba(" + getRandomNumber() + "," +
-				getRandomNumber() + "," +
-				getRandomNumber() + ",0.4)", "rgba(" + 
-				getRandomNumber() + "," +
-				getRandomNumber() + "," +
-				getRandomNumber() + ",0.4)"]
+				"rgba(0,0,255,0.4)",
+				"rgba(255,0,0,0.4)"
+			]
 		}]
 	};
 	pieChartByDrugSex = new Chart($("#pieChartByDrugSex").get(0), {
@@ -184,12 +181,9 @@ $.get(urlTmp, (data)=>{
 			label: "",
 			data: [273, 49],
 			backgroundColor: [
-				"rgba(" + getRandomNumber() + "," +
-				getRandomNumber() + "," +
-				getRandomNumber() + ",0.4)", "rgba(" + 
-				getRandomNumber() + "," +
-				getRandomNumber() + "," +
-				getRandomNumber() + ",0.4)"]
+				"rgba(0,0,255,0.4)",
+				"rgba(255,0,0,0.4)"
+			]
 		}]
 	};
 	pieChartByAlcoholSex = new Chart($("#pieChartByAlcoholSex").get(0), {
