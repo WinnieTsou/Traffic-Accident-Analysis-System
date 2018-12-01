@@ -360,6 +360,21 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "age":
+			sql = new StringBuilder();
+			sql.append("SELECT `manufacturer` AS 'm_id', `vehicle_manufacturer_code`.`description`, `age` DIV 10 * 10 AS 'age', count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`vehicle` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle_manufacturer_code` ON `vehicle`.`manufacturer` = `vehicle_manufacturer_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`person` ON `vehicle`.`casenum` = `person`.`casenum` AND `vehicle`.`vnumber` = `person`.`vnumber` ");
+			sql.append("WHERE (`age` BETWEEN 1 AND 100) AND (");
+			for (String type : types)
+				sql.append("`manufacturer` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `manufacturer`, `age` DIV 10 ORDER BY `manufacturer`, `age` DIV 10;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
