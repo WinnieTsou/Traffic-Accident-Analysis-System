@@ -384,7 +384,7 @@ public class QueryData extends HttpServlet {
 			sql.append("FROM `CS485_Project`.`vehicle` ");
 			sql.append("LEFT JOIN `CS485_Project`.`vehicle_manufacturer_code` ON `vehicle`.`manufacturer` = `vehicle_manufacturer_code`.`id` ");
 			sql.append("LEFT JOIN `CS485_Project`.`person` ON `vehicle`.`casenum` = `person`.`casenum` AND `vehicle`.`vnumber` = `person`.`vnumber` ");
-			sql.append("WHERE (`age` BETWEEN 1 AND 100) AND (");
+			sql.append("WHERE (`age` BETWEEN 1 AND 100) AND (`sex` BETWEEN 1 AND 2) AND (");
 			for (String type : types)
 				sql.append("`manufacturer` = " + type + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
