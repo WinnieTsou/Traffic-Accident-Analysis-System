@@ -327,7 +327,7 @@ public class QueryData extends HttpServlet {
 		JSONArray resultArray;
 
 		if (request.getParameter("chart") == null) {
-			resultArray = SQLQuery("SELECT * FROM `CS485_Project`.`vehicle_manufacturer_code` WHERE `id` BETWEEN 0 AND 95 ORDER BY `id`;");
+			resultArray = SQLQuery("SELECT * FROM `CS485_Project`.`vehicle_manufacturer_code` WHERE `id` BETWEEN 0 AND 95 ORDER BY `description`;");
 			response.getWriter().append(resultArray.toString());
 			return;
 		}
@@ -341,6 +341,21 @@ public class QueryData extends HttpServlet {
 				sql.append("`manufacturer` = " + type + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
 			sql.append("GROUP BY `manufacturer` ORDER BY `manufacturer`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		case "airbag":
+			sql = new StringBuilder();
+			sql.append("SELECT `airbag_deployed` AS 'a_id', `airbag_deployed_code`.`description` AS 'a_name', `manufacturer` AS 'm_id', `vehicle_manufacturer_code`.`description` AS 'm_name', count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`vehicle` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle_manufacturer_code` ON `vehicle`.`manufacturer` = `vehicle_manufacturer_code`.`id` ");
+			sql.append("LEFT JOIN `CS485_Project`.`airbag_deployed_code` ON `vehicle`.`airbag_deployed` = `airbag_deployed_code`.`id` ");
+			sql.append("WHERE (`airbag_deployed` BETWEEN 1 AND 98) AND (");
+			for (String type : types)
+				sql.append("`manufacturer` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append(") GROUP BY `airbag_deployed`, `manufacturer` ORDER BY `airbag_deployed`, `manufacturer`;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
