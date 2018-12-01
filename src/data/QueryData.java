@@ -333,6 +333,17 @@ public class QueryData extends HttpServlet {
 		}
 		switch (request.getParameter("chart")) {
 		case "total":
+			sql = new StringBuilder();
+			sql.append("SELECT `manufacturer` AS 'm_id', `description` AS 'm_name', count(*) AS 'count'");
+			sql.append("FROM `CS485_Project`.`vehicle` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle_manufacturer_code` ON `vehicle`.`manufacturer` = `vehicle_manufacturer_code`.`id` WHERE ");
+			for (String type : types)
+				sql.append("`manufacturer` = " + type + " OR ");
+			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
+			sql.append("GROUP BY `manufacturer` ORDER BY `manufacturer`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
 			break;
 		default:
 			response.getWriter().append("");
