@@ -41,6 +41,9 @@ public class QueryData extends HttpServlet {
 		case "car":
 			car(request, response);
 			break;
+		case "death":
+			death(request, response);
+			break;
 		default:
 			break;
 		}
@@ -386,6 +389,29 @@ public class QueryData extends HttpServlet {
 				sql.append("`manufacturer` = " + type + " OR ");
 			sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
 			sql.append(") GROUP BY `manufacturer`, `sex` ORDER BY `manufacturer`, `sex`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
+	}
+
+	private void death(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		switch (request.getParameter("chart")) {
+		case "cartype":
+			sql = new StringBuilder();
+			sql.append("SELECT `manufacturer` AS 'm_id', `vehicle_manufacturer_code`.`description`, count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`died` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle` ON `died`.`casenum` = `vehicle`.`casenum` AND `died`.`vnumber` = `vehicle`.`vnumber` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle_manufacturer_code` ON `vehicle`.`manufacturer` = `vehicle_manufacturer_code`.`id` ");
+			sql.append("GROUP BY `manufacturer` ORDER BY `description`;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
