@@ -100,7 +100,7 @@ $(document).ready(function(){
 	<div class="col-md-6">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Age</h3>
+				<h3 class="box-title">Age(Passenger Include)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -238,6 +238,125 @@ $("form").submit(function(e){
 				});
 			}
 			addData(barChartByAirbag, labelArr, datasetsArr);
+		});
+
+		urlTmp = url + "&chart=sex";
+		$.get(urlTmp, (data)=>{
+			barChartBySex.destroy();
+			barChartBySex = new Chart($("#barChartBySex").get(0), {
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
+						}]
+					}
+				}
+			});
+
+			var labelArr = []; labelArr["1"] = "Male"; labelArr["2"] = "Female";
+			var dataArr = [];
+			var datasetsArr = [];
+
+			$(":selected").each(function(){
+				dataArr[$(this).text()] = [];
+			});
+
+			for( var index in labelArr){
+				for( var key in dataArr){
+					if(dataArr[key] != null)
+						dataArr[key][index] = 0;
+				}
+			}
+			$.each(data, (key, row)=>{
+				dataArr[row.description][row.sex] = row.count;
+			});	
+			
+			for( var key in dataArr ){
+				var dataRow = [];
+
+				dataRow = dataArr[key].filter((element) => { return element != null; });
+				datasetsArr.push({
+					label: key,
+					data: dataRow,
+					backgroundColor: "rgba(" + 
+						getRandomNumber() + "," +
+						getRandomNumber() + "," +
+						getRandomNumber() + ",0.4)"
+				});
+			}
+			addData(barChartBySex, labelArr, datasetsArr);
+		});
+
+		urlTmp = url + "&chart=age";
+		$.get(urlTmp, (data)=>{
+			barChartByAge.destroy();
+			barChartByAge = new Chart($("#barChartByAge").get(0), {
+				type: "bar",
+				data: {},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}],
+						xAxes: [{
+							ticks: {
+								autoSkip: false,
+								fontSize: 10,
+								padding: 0
+							}
+						}]
+					}
+				}
+			});
+			var labelArr = [];
+			var dataArr = [];
+			var datasetsArr = [];
+
+			$.each(data, (key, row)=>{
+				if(labelArr[row.age] == null){
+					labelArr[row.age] = row.age+"-"+(((row.age/10+1)*10)-1);
+				}
+			});
+			$(":selected").each(function(){
+				dataArr[$(this).text()] = [];
+			});	
+			for( var index in labelArr){
+				for( var key in dataArr){
+					if(dataArr[key] != null)
+						dataArr[key][index] = 0;
+				}
+			}
+			$.each(data, (key, row)=>{
+				dataArr[row.description][row.age] = row.count;
+			});
+
+			for( var key in dataArr ){
+				var dataRow = [];
+
+				dataRow = dataArr[key].filter((element) => { return element != null; });
+				datasetsArr.push({
+					label: key,
+					data: dataRow,
+					backgroundColor: "rgba(" + 
+						getRandomNumber() + "," +
+						getRandomNumber() + "," +
+						getRandomNumber() + ",0.4)"
+				});
+			}
+			addData(barChartByAge, labelArr, datasetsArr);
 		});
 		$("#myChart").css({"display": "block"});
 	} else {
