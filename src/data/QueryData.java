@@ -44,8 +44,8 @@ public class QueryData extends HttpServlet {
 		case "death":
 			death(request, response);
 			break;
-		case "speeding":
-			speeding(request, response);
+		case "speed":
+			speed(request, response);
 			break;
 		default:
 			break;
@@ -483,7 +483,7 @@ public class QueryData extends HttpServlet {
 		}
 	}
 
-	private void speeding(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void speed(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		StringBuilder sql;
 		JSONArray resultArray;
@@ -497,6 +497,18 @@ public class QueryData extends HttpServlet {
 			sql.append("LEFT JOIN `CS485_Project`.`weather_code` ON `weather`.`weather_code` = `weather_code`.`id` ");
 			sql.append("WHERE `speed` BETWEEN 1 AND 151 AND `weather_code` BETWEEN 1 AND 97 ");
 			sql.append("GROUP BY `weather_code` ORDER BY `weather_code`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		case "route":
+			sql = new StringBuilder();
+			sql.append("SELECT `route_signing` AS 'r_id', `route_signing_code`.`description` AS 'route', AVG(`speed`) AS 'avg' ");
+			sql.append("FROM `CS485_Project`.`case` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle` ON `case`.`casenum` = `vehicle`.`casenum` ");
+			sql.append("LEFT JOIN `CS485_Project`.`route_signing_code` ON `case`.`route_signing` = `route_signing_code`.`id` ");
+			sql.append("WHERE `speed` BETWEEN 1 AND 151 AND `route_signing` BETWEEN 1 AND 8 ");
+			sql.append("GROUP BY `route_signing` ORDER BY `route_signing`;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
