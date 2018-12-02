@@ -513,6 +513,18 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "injury":
+			sql = new StringBuilder();
+			sql.append("SELECT `injury` AS 'i_id', `injury_severity`.`description`, `speed` ");
+			sql.append("FROM `CS485_Project`.`person` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle` ON `person`.`casenum` = `vehicle`.`casenum` AND `person`.`vnumber` = `vehicle`.`vnumber` ");
+			sql.append("LEFT JOIN `CS485_Project`.`injury_severity` ON `person`.`injury` = `injury_severity`.`id` ");
+			sql.append("WHERE `speed` BETWEEN 1 AND 151 ");
+			sql.append("ORDER BY `injury`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
