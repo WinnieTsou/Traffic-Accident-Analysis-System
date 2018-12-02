@@ -525,6 +525,18 @@ public class QueryData extends HttpServlet {
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
 			break;
+		case "death":
+			sql = new StringBuilder();
+			sql.append("SELECT AVG(`speed`) DIV 10 * 10 AS 'avg_speed', count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`person` ");
+			sql.append("LEFT JOIN `CS485_Project`.`vehicle` ON `person`.`casenum` = `vehicle`.`casenum` AND `person`.`vnumber` = `vehicle`.`vnumber` ");
+			sql.append("LEFT JOIN `CS485_Project`.`died` ON `person`.`casenum` = `died`.`casenum` AND `person`.`vnumber` = `died`.`vnumber` AND `person`.`pnumber` = `died`.`pnumber` ");
+			sql.append("WHERE `speed` BETWEEN 1 AND 151 AND `time` IS NOT NULL ");
+			sql.append("GROUP BY `speed` DIV 10 ORDER BY `speed` DIV 10;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
 		default:
 			response.getWriter().append("");
 			break;
