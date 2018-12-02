@@ -112,10 +112,9 @@ desired effect
         <li id="deathaccident"><a href="deathaccident"><i class="fa fa-user-times"></i> <span>Death Accident</span></a></li>
         <li id="speed"><a href="speed"><i class="fa fa-dashboard"></i> <span>Speed</span></a></li>
         <li id="factor"><a href="factor"><i class="fa fa-reddit-alien"></i> <span>Factor</span></a></li>
-        <li id="age"><a href="age"><i class="fa fa-group"></i> <span>Age</span></a></li>
+        <li id="collision"><a href="collision"><i class="fa fa-exclamation-circle"></i> <span>Manner of Collision</span></a></li>
         <li class="header">ADVANCED</li>
         <li id="multiple"><a href="multiple"><i class="fa fa-sliders"></i> <span>Multiple Select</span></a></li>
-        <li id="collision"><a href="collision"><i class="fa fa-exclamation-circle"></i> <span>Manner of Collision</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
