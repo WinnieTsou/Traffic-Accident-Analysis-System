@@ -47,6 +47,9 @@ public class QueryData extends HttpServlet {
 		case "speed":
 			speed(request, response);
 			break;
+		case "factor":
+			factor(request, response);
+			break;
 		default:
 			break;
 		}
@@ -484,7 +487,7 @@ public class QueryData extends HttpServlet {
 	}
 
 	private void speed(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		StringBuilder sql;
 		JSONArray resultArray;
 
@@ -536,6 +539,26 @@ public class QueryData extends HttpServlet {
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
+	}
+
+	private void factor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String[] types = request.getParameterValues("type");
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		if (request.getParameter("chart") == null) {
+			resultArray = SQLQuery("SELECT `CS485_Project`.`crash_factor_code`.`id` AS 'c_id', `description`, count(*) FROM `crash_factor` LEFT JOIN `crash_factor_code` ON `crash_factor`.`crash_factor_code` = `crash_factor_code`.`id` WHERE `crash_factor_code`.`id` < 90 GROUP BY `crash_factor_code`.`id` ORDER BY `description`;");
+			response.getWriter().append(resultArray.toString());
+			return;
+		}
+		switch (request.getParameter("chart")) {
+		case "total":
 			break;
 		default:
 			response.getWriter().append("");
