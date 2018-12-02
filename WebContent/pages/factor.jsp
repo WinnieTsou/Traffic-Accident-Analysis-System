@@ -23,8 +23,9 @@
 </div>
 <script type="text/javascript">
 var barChartByTotal = new Chart($("#barChartByTotal").get(0));
-var url = "data?page=factor&chart=total";
-$.get(url, (data)=>{
+var url = "data?page=factor";
+var urlTmp = "&chart=total";
+$.get(urlTmp, (data)=>{
 	barChartByTotal.destroy();
 	barChartByTotal = new Chart($("#barChartByTotal").get(0), {
 		type: "bar",
