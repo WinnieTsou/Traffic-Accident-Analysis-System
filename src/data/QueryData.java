@@ -553,7 +553,7 @@ public class QueryData extends HttpServlet {
 		JSONArray resultArray;
 
 		if (request.getParameter("chart") == null) {
-			resultArray = SQLQuery("SELECT `CS485_Project`.`crash_factor_code`.`id` AS 'c_id', `description`, count(*) FROM `crash_factor` LEFT JOIN `crash_factor_code` ON `crash_factor`.`crash_factor_code` = `crash_factor_code`.`id` WHERE `crash_factor_code`.`id` < 90 GROUP BY `crash_factor_code`.`id` ORDER BY `description`;");
+			resultArray = SQLQuery("SELECT `crash_factor_code`.`id` AS 'c_id', `description`, count(*) AS `count` FROM `CS485_Project`.`crash_factor` LEFT JOIN `CS485_Project`.`crash_factor_code` ON `crash_factor`.`crash_factor_code` = `crash_factor_code`.`id` WHERE `crash_factor_code`.`id` < 90 GROUP BY `crash_factor_code`.`id` ORDER BY `description`;");
 			response.getWriter().append(resultArray.toString());
 			return;
 		}
