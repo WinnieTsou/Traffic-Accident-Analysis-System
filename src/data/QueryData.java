@@ -50,6 +50,9 @@ public class QueryData extends HttpServlet {
 		case "factor":
 			factor(request, response);
 			break;
+		case "collision":
+			collision(request, response);
+			break;
 		default:
 			break;
 		}
@@ -559,6 +562,28 @@ public class QueryData extends HttpServlet {
 			sql.append("LEFT JOIN `CS485_Project`.`crash_factor_code` ON `crash_factor`.`crash_factor_code` = `crash_factor_code`.`id` ");
 			sql.append("WHERE `crash_factor_code`.`id` < 90 ");
 			sql.append("GROUP BY `crash_factor_code`.`id` ORDER BY `description`;");
+			System.out.println(sql.toString());
+			resultArray = SQLQuery(sql.toString());
+			response.getWriter().append(resultArray.toString());
+			break;
+		default:
+			response.getWriter().append("");
+			break;
+		}
+	}
+
+	private void collision(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		StringBuilder sql;
+		JSONArray resultArray;
+
+		switch (request.getParameter("chart")) {
+		case "total":
+			sql = new StringBuilder();
+			sql.append("SELECT `collision_code`.`id` AS 'c_id', `description`, count(*) AS 'count' ");
+			sql.append("FROM `CS485_Project`.`case` ");
+			sql.append("LEFT JOIN `CS485_Project`.`collision_code` ON `case`.`collision_type` = `collision_code`.`id` ");
+			sql.append("WHERE `collision_code`.`id` < 97 ");
+			sql.append("GROUP BY `collision_code`.`id` ORDER BY `collision_code`.`id`;");
 			System.out.println(sql.toString());
 			resultArray = SQLQuery(sql.toString());
 			response.getWriter().append(resultArray.toString());
