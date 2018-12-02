@@ -113,8 +113,6 @@ desired effect
         <li id="speed"><a href="speed"><i class="fa fa-dashboard"></i> <span>Speed</span></a></li>
         <li id="factor"><a href="factor"><i class="fa fa-reddit-alien"></i> <span>Factor</span></a></li>
         <li id="collision"><a href="collision"><i class="fa fa-exclamation-circle"></i> <span>Manner of Collision</span></a></li>
-        <li class="header">ADVANCED</li>
-        <li id="multiple"><a href="multiple"><i class="fa fa-sliders"></i> <span>Multiple Select</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -146,8 +144,6 @@ desired effect
         	case "deathaccident": %><jsp:include page="./pages/deathaccident.jsp"/><script>$("#deathaccident").addClass("active");</script><% break;
         	case "speed": %><jsp:include page="./pages/speed.jsp"/><script>$("#speed").addClass("active");</script><% break;
         	case "factor": %><jsp:include page="./pages/factor.jsp"/><script>$("#factor").addClass("active");</script><% break;
-        	case "age": %><jsp:include page="./pages/age.jsp"/><script>$("#age").addClass("active");</script><% break;
-        	case "multipleselect": %><jsp:include page="./pages/multipleselect.jsp"/><script>$("#multiple").addClass("active");</script><% break;
         	case "mannerofcollision": %><jsp:include page="./pages/mannerofcollision.jsp"/><script>$("#collision").addClass("active");</script><% break;
         	}
         %>

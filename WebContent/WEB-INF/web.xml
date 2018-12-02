@@ -37,15 +37,6 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>ShowByAge</servlet-name>
-		<servlet-class>show.ShowByAge</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ShowByAge</servlet-name>
-		<url-pattern>/age</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>ShowByDeathAccident</servlet-name>
 		<servlet-class>show.ShowByDeathAccident</servlet-class>
 	</servlet>
@@ -117,12 +108,4 @@
 		<url-pattern>/collision</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>MultipleSelect</servlet-name>
-		<servlet-class>show.MultipleSelect</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>MultipleSelect</servlet-name>
-		<url-pattern>/multiple</url-pattern>
-	</servlet-mapping>
 </web-app>
