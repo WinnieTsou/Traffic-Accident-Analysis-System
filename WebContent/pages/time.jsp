@@ -122,6 +122,9 @@ $("form").submit(function(e){
 				type: "bar",
 				data: {},
 				options: {
+					legend: {
+						display: false
+					},
 					scales: {
 						yAxes: [{
 							ticks: {
@@ -131,22 +134,30 @@ $("form").submit(function(e){
 					}
 				}
 			});
-			var labelArr = [" "];
-			var datasetsArr = [];
+			var labelArr = [];
+			var dataArr = [];
+			var background = [];
 
-			$.each(data, (i)=>{
-				var datatmp = {
-					label: "",
-					data: [],
-					backgroundColor: {}
-				}
-				datatmp.label = data[i].year;
-				datatmp.data.push(data[i].count);
-				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
-				datasetsArr.push(datatmp);			
+			$(":checked").each(function(){
+				labelArr[$(this).val()] = $(this).val();
+				dataArr[$(this).val()] = 0;
+				background.push("rgba("
+					+getRandomNumber()+","
+					+getRandomNumber()+","
+					+getRandomNumber()+",0.4)");
 			});
 
-			addData(polarChartByTotal, labelArr, datasetsArr);
+			$.each(data, (key, row)=>{
+				dataArr[row.year] = row.count;
+			});
+			labelArr = labelArr.filter((element) => { return element != null; });
+			dataArr = dataArr.filter((element) => { return element != null; });
+
+			addData(polarChartByTotal, labelArr, [{
+				label: "",
+				data: dataArr,
+				backgroundColor: background
+			}]);
 		});
 
 		urlTmp = url + "&chart=month";
@@ -267,6 +278,9 @@ $("form").submit(function(e){
 				type: "bar",
 				data: {},
 				options: {
+					legend: {
+						display: false
+					},
 					scales: {
 						yAxes: [{
 							ticks: {
@@ -276,22 +290,27 @@ $("form").submit(function(e){
 					}
 				}
 			});
-			var labelArr = [" "];
-			var datasetsArr = [];
-
-			$.each(data, (i)=>{
-				var datatmp = {
-					label: "",
-					data: [],
-					backgroundColor: {}
-				}
-				datatmp.label = data[i].year;
-				datatmp.data.push(data[i].died);
-				datatmp.backgroundColor = "rgba("+getRandomNumber()+","+getRandomNumber()+","+getRandomNumber()+",0.4)";
-				datasetsArr.push(datatmp);			
+			var labelArr = [];
+			var dataArr = [];
+			var background = [];
+			$(":checked").each(function(){
+				labelArr[$(this).val()] = $(this).val();
+				dataArr[$(this).val()] = 0;
+				background.push("rgba("
+					+getRandomNumber()+","
+					+getRandomNumber()+","
+					+getRandomNumber()+",0.4)");
 			});
-
-			addData(barChartByDeath, labelArr, datasetsArr);
+			$.each(data, (key, row)=>{
+				dataArr[row.year] = row.died;
+			});
+			labelArr = labelArr.filter((element) => { return element != null; });
+			dataArr = dataArr.filter((element) => { return element != null; });
+			addData(barChartByDeath, labelArr, [{
+				label: "",
+				data: dataArr,
+				backgroundColor: background
+			}]);
 		});
 
 		$("#myChart").css({"display": "block"});
