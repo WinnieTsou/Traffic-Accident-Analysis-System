@@ -57,7 +57,12 @@ function initMap() {
 				'<div id="siteNotice"></div>'+
 				'<h1 id="firstHeading" class="firstHeading">' + 'Case ID: ' + data.casenum + '</h1>'+
 				'<div id="bodyContent">'+
-				'<p>' + 'Happend Time: ' + data.accident_date.substring(0, data.accident_date.length - 5) + '</p>'+
+				'<p>' + '<strong>Happend Time:</strong> ' + data.accident_date.substring(0, data.accident_date.length - 5) + '</p>'+
+				'<p></p>'+
+				'<p>' + '<strong>Collision Type:</strong> ' + data.collision + '</p>'+
+				'<p>' + '<strong>Light Condition:</strong> ' + data.light_condition + '</p>'+
+				'<p>' + '<strong>Crash Factor:</strong> ' + (data.crash_factor == null ? 'Not Reported' : data.crash_factor) + '</p>'+
+				'<p>' + '<strong>Weather:</strong> ' + data.weather + '</p>'+
 				'<p></p>'+
 				'</div>'+
 				'</div>';

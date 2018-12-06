@@ -91,7 +91,19 @@ public class QueryData extends HttpServlet {
 
 	private void all(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		JSONArray resultArray = SQLQuery("SELECT * FROM `CS485_Project`.`case` WHERE 1;");
+		StringBuilder sql= new StringBuilder();
+
+		sql.append("SELECT `case`.`casenum`, `longitude`, `latitude`, `accident_date`, `collision_code`.`description` AS 'collision', `light_condition_code`.`description` AS 'light_condition', `crash_factor_code`.`description` AS 'crash_factor', `weather_code`.`description` AS 'weather' ");
+		sql.append("FROM `CS485_Project`.`case` ");
+		sql.append("LEFT JOIN `CS485_Project`.`collision_code` ON `collision_code`.`id` = `case`.`collision_type` ");
+		sql.append("LEFT JOIN `CS485_Project`.`light_condition_code` ON `light_condition_code`.`id` = `case`.`light_condition` ");
+		sql.append("LEFT JOIN `CS485_Project`.`crash_factor` ON `crash_factor`.`casenum` = `case`.`casenum` ");
+		sql.append("LEFT JOIN `CS485_Project`.`crash_factor_code` ON `crash_factor`.`crash_factor_code` = `crash_factor_code`.`id` ");
+		sql.append("LEFT JOIN `CS485_Project`.`weather` ON `weather`.`casenum` = `case`.`casenum` ");
+		sql.append("LEFT JOIN `CS485_Project`.`weather_code` ON `weather`.`weather_code` = `weather_code`.`id` ");
+		sql.append("GROUP BY `case`.`casenum`");
+		System.out.println(sql.toString());
+		JSONArray resultArray = SQLQuery(sql.toString());
 		response.getWriter().append(resultArray.toString());
 	}
 
