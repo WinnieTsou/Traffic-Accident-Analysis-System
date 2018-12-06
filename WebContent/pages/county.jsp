@@ -37,7 +37,7 @@ $(document).ready(function(){
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Total</h3>
+				<h3 class="box-title">Total (Case)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -59,7 +59,7 @@ $(document).ready(function(){
 		<!-- DOUGHNUT CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Speeding</h3>
+				<h3 class="box-title">Speeding (Vechicle)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -80,7 +80,7 @@ $(document).ready(function(){
 	<div class="col-md-12">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Intersection</h3>
+				<h3 class="box-title">Intersection (Case)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
