@@ -105,9 +105,9 @@ desired effect
         <li id="all"><a href="all"><i class="fa fa-line-chart"></i> <span>All</span></a></li>
         <li class="header">FILTER BY</li>
         <li id="county"><a href="county"><i class="fa fa-location-arrow"></i> <span>County</span></a></li>
-        <li id="time"><a href="time"><i class="fa fa-calendar"></i> <span>Year/Month</span></a></li>
+        <li id="time"><a href="time"><i class="fa fa-calendar"></i> <span>Year</span></a></li>
         <li id="weather"><a href="weather"><i class="fa fa-sun-o"></i><span>Weather</span></a></li>
-        <li id="drugoralcohol"><a href="drugoralcohol"><i class="fa fa-beer"></i> <span>Drug/Alcohol</span></a></li>
+        <li id="drugoralcohol"><a href="drugoralcohol"><i class="fa fa-beer"></i> <span>Drug / Alcohol</span></a></li>
         <li id="car"><a href="car"><i class="fa fa-car"></i> <span>Type of Car</span></a></li>
         <li id="deathaccident"><a href="deathaccident"><i class="fa fa-user-times"></i> <span>Death Accident</span></a></li>
         <li id="speed"><a href="speed"><i class="fa fa-dashboard"></i> <span>Speed</span></a></li>

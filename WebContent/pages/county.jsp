@@ -119,10 +119,14 @@ $("form").submit(function(e){
 				type: "bar",
 				data: {},
 				options: {
+					legend: {
+						display: false
+					},
 					scales: {
 						yAxes: [{
 							ticks: {
-								beginAtZero:true
+								beginAtZero: true,
+								stepSize: 5
 							}
 						}]
 					}
@@ -130,34 +134,27 @@ $("form").submit(function(e){
 			});
 			var labelArr = [];
 			var dataArr = [];
-			var datasetsArr = [];
+			var background = [];
+
 
 			$(":selected").each(function(){
 				labelArr[$(this).val()] = $(this).text();
+				dataArr[$(this).val()] = 0;
+				background.push("rgba(" + 
+					getRandomNumber() + "," +
+					getRandomNumber() + "," +
+					getRandomNumber() + ",0.4)");
 			});
-			$.each(labelArr, function(i){
-				if(labelArr[i] != null){
-					var dataTmp = 0;
-					$.each(data, (key, row)=>{
-						if(row.c_name == labelArr[i]){
-							dataTmp = row.count;
-						}
-					});
-
-					var dataRow = [];
-					dataRow.push(dataTmp);
-
-					datasetsArr.push({
-						label: labelArr[i],
-						data: dataRow,
-						backgroundColor: "rgba(" + 
-							getRandomNumber() + "," +
-							getRandomNumber() + "," +
-							getRandomNumber() + ",0.4)"
-					});
-				}
+			$.each(data, (key, row)=>{
+				dataArr[row.c_id] = row.count;
 			});
-			addData(barChartByTotal, [" "], datasetsArr);
+			dataArr = dataArr.filter((element) => { return element != null; });
+			labelArr = labelArr.filter((element) => { return element != null; });
+			addData(barChartByTotal, labelArr, [{
+				label: "",
+				data: dataArr,
+				backgroundColor: background
+			}]);
 		});
 
 		urlTmp = url + "&chart=speeding";
