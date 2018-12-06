@@ -5,7 +5,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Type of Car</h3>
+				<h3 class="box-title">Type of Car (Vehicle)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -27,7 +27,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Died while Driving Under the Influence</h3>
+				<h3 class="box-title">Died while Driving Under the Influence (People)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -49,7 +49,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Manufacture Year</h3>
+				<h3 class="box-title">Manufacture Year (Vehicle)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -71,7 +71,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Sex</h3>
+				<h3 class="box-title">Sex (People)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -93,7 +93,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Age</h3>
+				<h3 class="box-title">Age (People)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>

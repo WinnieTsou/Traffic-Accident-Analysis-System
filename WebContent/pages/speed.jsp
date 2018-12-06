@@ -5,7 +5,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Weather</h3>
+				<h3 class="box-title">Weather (Vehicle)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -27,7 +27,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Route Sign</h3>
+				<h3 class="box-title">Route Sign (Vehicle)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -49,7 +49,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Injury</h3>
+				<h3 class="box-title">Injury (People)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -71,7 +71,7 @@
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Death</h3>
+				<h3 class="box-title">Death (People)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>

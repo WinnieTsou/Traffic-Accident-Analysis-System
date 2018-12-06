@@ -37,7 +37,7 @@ $(document).ready(function(){
 		<!-- PIE CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Total</h3>
+				<h3 class="box-title">Total (Vehicle)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -59,7 +59,7 @@ $(document).ready(function(){
 		<!-- BAR CHART -->
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Accident Car with Airbag Installed</h3>
+				<h3 class="box-title">Accident Vehicle with Airbag Installed</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -80,7 +80,7 @@ $(document).ready(function(){
 	<div class="col-md-6">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Sex</h3>
+				<h3 class="box-title">Sex (Driver & Passenger)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
@@ -100,7 +100,7 @@ $(document).ready(function(){
 	<div class="col-md-6">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Age(Passenger Include)</h3>
+				<h3 class="box-title">Age (Driver & Passenger)</h3>
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
