@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html>
 <head>
 <!-- REQUIRED JS SCRIPTS -->
@@ -107,9 +103,9 @@ desired effect
         <li id="county"><a href="county"><i class="fa fa-location-arrow"></i> <span>County</span></a></li>
         <li id="time"><a href="time"><i class="fa fa-calendar"></i> <span>Year</span></a></li>
         <li id="weather"><a href="weather"><i class="fa fa-sun-o"></i><span>Weather</span></a></li>
-        <li id="drugoralcohol"><a href="drugoralcohol"><i class="fa fa-beer"></i> <span>Drug / Alcohol</span></a></li>
+        <li id="drugoralcohol"><a href="drugalcohol"><i class="fa fa-beer"></i> <span>Drug / Alcohol</span></a></li>
         <li id="car"><a href="car"><i class="fa fa-car"></i> <span>Type of Car</span></a></li>
-        <li id="death"><a href="deathaccident"><i class="fa fa-user-times"></i> <span>Death Accident</span></a></li>
+        <li id="death"><a href="death"><i class="fa fa-user-times"></i> <span>Death Accident</span></a></li>
         <li id="speed"><a href="speed"><i class="fa fa-dashboard"></i> <span>Speed</span></a></li>
         <li id="factor"><a href="factor"><i class="fa fa-reddit-alien"></i> <span>Factor</span></a></li>
         <li id="collision"><a href="collision"><i class="fa fa-exclamation-circle"></i> <span>Manner of Collision</span></a></li>
@@ -132,21 +128,6 @@ desired effect
     <!-- Main content -->
     <section class="content container-fluid">
       @yield('content')
-        <!-- <%
-        	String key = (String)request.getAttribute("key");
-        	switch(key){
-        	case "all": %><jsp:include page="./pages/all.jsp"/><script>$("#all").addClass("active");</script><% break;
-        	case "county": %><jsp:include page="./pages/county.jsp"/><script>$("#county").addClass("active");</script><% break;
-        	case "time": %><jsp:include page="./pages/time.jsp"/><script>$("#time").addClass("active");</script><% break;
-        	case "weather": %><jsp:include page="./pages/weather.jsp"/><script>$("#weather").addClass("active");</script><% break;
-        	case "drugoralcohol": %><jsp:include page="./pages/drugoralcohol.jsp"/><script>$("#drugoralcohol").addClass("active");</script><% break;
-        	case "typeofcar": %><jsp:include page="./pages/typeofcar.jsp"/><script>$("#car").addClass("active");</script><% break;
-        	case "deathaccident": %><jsp:include page="./pages/deathaccident.jsp"/><script>$("#deathaccident").addClass("active");</script><% break;
-        	case "speed": %><jsp:include page="./pages/speed.jsp"/><script>$("#speed").addClass("active");</script><% break;
-        	case "factor": %><jsp:include page="./pages/factor.jsp"/><script>$("#factor").addClass("active");</script><% break;
-        	case "mannerofcollision": %><jsp:include page="./pages/mannerofcollision.jsp"/><script>$("#collision").addClass("active");</script><% break;
-        	}
-        %> -->
 
     </section>
     <!-- /.content -->
@@ -165,5 +146,11 @@ desired effect
 </div>
 <!-- ./wrapper -->
 
+<script>
+  var id = '#' + '{{$id}}';
+  $(document).ready(function(){
+    $(id).addClass('active');
+  });
+</script>
 </body>
 </html>
