@@ -116,7 +116,7 @@ $("form").submit(function(e){
 	if($(":selected").length!=0){
 		var url = "data?page=county";
 		$(":selected").each(function(){
-			url += "&county=" + $(this).val();
+			url += "&county[]=" + $(this).val();
 		});
 
 		var urlTmp = url + "&chart=total";
