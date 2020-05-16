@@ -69,16 +69,6 @@ class DataController extends Controller
                             ->orderBy('county_id', 'asc')
                             ->get();
              } else if ($chart == 'intersection') {
-            // sql.append("SELECT `county_id` AS 'c_id', `county_code`.`description` AS 'c_name', `intersection_type` AS 'i_code', `intersection_type_code`.`description` AS 'i_type', COUNT(*) AS 'count' ");
-            // sql.append("FROM `CS485_Project`.`case` ");
-            // sql.append("LEFT JOIN `CS485_Project`.`county_code` ON `case`.`county_id` = `county_code`.`id` ");
-            // sql.append("LEFT JOIN `CS485_Project`.`intersection_type_code` ON `case`.`intersection_type` = `intersection_type_code`.`id` ");
-            // sql.append("WHERE `intersection_type` < 11  AND (");
-            // for (String county : counties)
-                // sql.append("`county_id` = " + county + " OR ");
-            // sql.replace(sql.lastIndexOf("OR"), sql.lastIndexOf("OR") + 2, "");
-            // sql.append(") GROUP BY `county_id`, `intersection_type` ");
-            // sql.append("ORDER BY `county_id`, `intersection_type`;");
                 $sql = '(' . $sql . ')';
                 $order = DB::table('case')
                             ->select('county_id as c_id',
@@ -90,7 +80,6 @@ class DataController extends Controller
                             ->leftJoin('intersection_type_code', 'case.intersection_type', '=', 'intersection_type_code.id')
                             ->whereRaw('`intersection_type` < 11 AND ' . $sql)
                             ->groupBy('county_id', 'intersection_type')
-                            // ->orderBy('county_id', 'intersection_type', 'asc')
                             ->orderByRaw('county_id, intersection_type asc')
                             ->get();
                 }
@@ -99,7 +88,59 @@ class DataController extends Controller
     }
 
     private function time(Request $request) {
+        $chart = $request->query('chart');
+        $query = explode('&', $_SERVER['QUERY_STRING']);
+        $condition = "";
 
+
+        foreach ($query as $year) {
+            if (strpos($year, 'year') !== false) {
+                $condition .= "YEAR(accident_date) = " . substr($year, strpos($year, '=')+1, strlen($year)) . " OR ";
+            }
+        }
+
+        $condition = substr($condition, 0, strrpos($condition ,'OR'));
+
+        if ($chart == 'total') {
+            
+            $order = DB::table('case')
+                    ->select(DB::raw("YEAR(`accident_date`) AS 'year', count(*) AS 'count'"))
+                    ->whereRaw($condition)
+                    ->groupBy(DB::raw('YEAR(`accident_date`)'))
+                    ->get();
+
+        } else if ($chart == 'month') {
+
+            $order = DB::table('case')
+                    ->select(DB::raw("YEAR(`accident_date`) AS 'year', MONTH(`accident_date`) AS 'month', count(*) AS 'count'"))
+                    ->whereRaw($condition)
+                    ->groupBy(DB::raw("YEAR(`accident_date`), MONTH(`accident_date`)"))
+                    ->orderBy('year')
+                    ->orderBy('month')
+                    ->get();
+        } else if ($chart == 'holiday') {
+
+            $order = DB::table('case')
+                    ->select(DB::raw("YEAR(`accident_date`) AS 'year', `holiday_code`.`id` AS 'h_id', `holiday_code`.`description` AS 'holiday', count('holiday') AS 'count'"))
+                    ->leftJoin('holiday_code', 'case.holiday_related', '=', 'holiday_code.id')
+                    ->whereRaw('holiday_related > 0 AND ' . $condition)
+                    ->groupBy(DB::raw('YEAR(accident_date), holiday'))
+                    ->orderBy('year', 'asc')
+                    ->orderBy('case.holiday_related', 'asc')
+                    ->get();
+        } else if ($chart == 'death') {
+
+            $condition = str_replace('accident_date', 'time', $condition);
+            $order = DB::table('died')
+                    ->select(DB::raw("YEAR(`time`) AS 'year', count(*) AS 'died'"))
+                    ->whereRaw($condition)
+                    ->groupBy(DB::raw('YEAR(time)'))
+                    ->orderBy(DB::raw('YEAR(time)'))
+                    ->get();
+        }
+
+
+        return $order;
     }
 
     private function weather(Request $request) {
