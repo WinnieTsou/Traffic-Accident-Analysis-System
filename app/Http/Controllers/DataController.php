@@ -196,11 +196,164 @@ class DataController extends Controller
     }
 
     private function drugAlcohol(Request $request) {
-        
+        $chart = $request->query('chart');
+
+        if ($chart === 'total') {
+            $drug = DB::table('drug_test')
+                    ->select(DB::raw("SUBSTRING(`casenum`, 1, 4) AS 'year', count(`result`) AS 'drug_count'"))
+                    ->whereRaw("`result` BETWEEN 100 AND 996 GROUP BY `year` ORDER BY `year`")
+                    ->get();
+            
+            $alcohol_test = DB::table('alcohol_test')
+                    ->select(DB::raw("SUBSTRING(`casenum`, 1, 4) AS 'year', count(`result`) AS 'alcohol_count'"))
+                    ->whereRaw("`result` BETWEEN 1 AND 995 GROUP BY `year` ORDER BY `year`")
+                    ->get();
+
+            $order = Array();
+            foreach ($drug as $drug_item) {
+                array_push($order, $drug_item);
+            }
+            foreach ($alcohol_test as $alcohol_test_item) {
+                array_push($order, $alcohol_test_item);
+            }
+
+        } else if ($chart === 'dsex') {
+            $person = DB::table('person')
+                    ->select(DB::raw("`injury` AS 'i_id', `description`, count(*) AS 'd_count'"))
+                    ->leftJoin('injury_severity', 'person.injury', '=', 'injury_severity.id')
+                    ->leftJoin('drug_test', function($join){
+                        $join->on('person.casenum', '=', 'drug_test.casenum');
+                        $join->on('person.vnumber', '=', 'drug_test.vnumber');
+                        $join->on('person.pnumber', '=', 'drug_test.pnumber');
+                    })
+                    ->whereBetween('result', [100, 996])
+                    ->groupBy('injury')
+                    ->orderBy('injury')
+                    ->get();
+            
+            $alcohol_test = DB::table('person')
+                    ->select(DB::raw("`injury` AS 'i_id', `description`, count(*) AS 'a_count'"))
+                    ->leftJoin('injury_severity', 'person.injury', '=', 'injury_severity.id')
+                    ->leftJoin('alcohol_test', function($join) {
+                        $join->on('person.casenum', '=', 'alcohol_test.casenum');
+                        $join->on('person.vnumber', '=', 'alcohol_test.vnumber');
+                        $join->on('person.pnumber', '=', 'alcohol_test.pnumber');
+                    })
+                    ->whereBetween('result', [1, 995])
+                    ->groupBy('injury')
+                    ->orderBy('injury')
+                    ->get();
+
+            $order = Array();
+            foreach ($person as $person_item) {
+                array_push($order, $person_item);
+            }
+            foreach ($alcohol_test as $alcohol_test_item) {
+                array_push($order, $alcohol_test_item);
+            }
+
+        } else if ($chart === 'asex') {
+
+            $order = DB::table('alcohol_test')
+                    ->select(DB::raw("`sex` AS 'alcohol_sex', count(*) AS 'count'"))
+                    ->leftJoin('person', function($join){
+                        $join->on('alcohol_test.casenum', '=', 'person.casenum');
+                        $join->on('alcohol_test.vnumber', '=', 'person.vnumber');
+                        $join->on('alcohol_test.pnumber', '=', 'person.pnumber');
+                    })
+                    ->whereBetween('result', [1, 995])
+                    ->groupBy('sex')
+                    ->orderBy('sex')
+                    ->get();
+
+        } else if ($chart === 'injury') {
+
+            $drug = DB::table('person')
+                    ->select(DB::raw("`injury` AS 'i_id', `description`, count(*) AS 'd_count'"))
+                    ->leftJoin('injury_severity', 'person.injury', '=', 'injury_severity.id')
+                    ->leftJoin('drug_test', function($join){
+                        $join->on('person.casenum', '=', 'drug_test.casenum');
+                        $join->on('person.vnumber', '=', 'drug_test.vnumber');
+                        $join->on('person.pnumber', '=', 'drug_test.pnumber');
+                    })
+                    ->whereBetween('result', [100, 996])
+                    ->groupBy('injury')
+                    ->orderBy('injury')
+                    ->get();
+
+            $alcohol = DB::table('person')
+                    ->select(DB::raw("`injury` AS 'i_id', `description`, count(*) AS 'a_count'"))
+                    ->leftJoin('injury_severity', 'person.injury', '=', 'injury_severity.id')
+                    ->leftJoin('alcohol_test', function($join){
+                        $join->on('person.casenum', '=', 'alcohol_test.casenum');
+                        $join->on('person.vnumber', '=', 'alcohol_test.vnumber');
+                        $join->on('person.pnumber', '=', 'alcohol_test.pnumber');
+                    })
+                    ->whereBetween('result', [1, 995])
+                    ->groupBy('injury')
+                    ->orderBy('injury')
+                    ->get();
+
+            $order = array();
+            foreach ($drug as $drug_item) {
+                array_push($order, $drug_item);
+            }
+            foreach ($alcohol as $alcohol_item) {
+                array_push($order, $alcohol_item);
+            }
+        }
+        return $order;
     }
 
     private function car(Request $request) {
-        
+        $chart = $request->query('chart');
+        $query = explode('&', $_SERVER['QUERY_STRING']);
+        $condition = '';
+
+        foreach ($query as $param) {
+            $type = substr($param, strpos($param, '=')+1, strlen($param));
+            if (is_numeric($type)) {
+                $condition .= '`manufacturer` = ' . $type . ' OR ';
+            }
+        }
+        $condition = substr($condition, 0, strrpos($condition ,'OR'));
+
+        if ($chart == null){
+            $order = DB::table('vehicle_manufacturer_code')
+                    ->select('*')
+                    ->whereBetween('id', [0, 95])
+                    ->orderBy('description')
+                    ->get();
+        }
+
+        if ($chart === 'total') {
+            $order = DB::table('vehicle')
+                    ->select(DB::raw("`manufacturer` AS 'm_id', `description` AS 'm_name', count(*) AS 'count'"))
+                    ->leftJoin('vehicle_manufacturer_code', 'vehicle.manufacturer', '=',  'vehicle_manufacturer_code.id')
+                    ->whereRaw($condition)
+                    ->groupBy('manufacturer')
+                    ->orderBy('manufacturer')
+                    ->get();
+        } else if ($chart === 'airbag') {
+            $order = DB::table('vehicle')
+                    ->select(DB::raw("`airbag_deployed` AS 'a_id', `airbag_deployed_code`.`description` AS 'a_name', `manufacturer` AS 'm_id', `vehicle_manufacturer_code`.`description` AS 'm_name', count(*) AS 'count'"))
+                    ->leftJoin('vehicle_manufacturer_code', 'vehicle.manufacturer', '=',  'vehicle_manufacturer_code.id')
+                    ->leftJoin('airbag_deployed_code', 'vehicle.airbag_deployed', '=', 'airbag_deployed_code.id')
+                    ->whereRaw('`airbag_deployed` BETWEEN 1 AND 98 AND ' . $condition)
+                    ->groupBy('airbag_deployed')
+                    ->groupBy('manufacturer')
+                    ->orderBy('airbag_deployed', 'asc')
+                    ->orderBy('manufacturer', 'asc')
+                    ->get();
+        } else if ($chart === 'age') {
+
+        } else if ($chart === 'sex') {
+
+        } else if ($chart === 'drug') {
+
+        }
+
+        return $order;
     }
 
     private function death(Request $request) {
